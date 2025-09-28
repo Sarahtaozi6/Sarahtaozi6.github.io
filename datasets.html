@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Datasets · Supermarket Fresh Food CV Tutorial</title>
+  <meta name="description" content="A graduate-level web tutorial on supermarket fresh food (fruits/vegetables) recognition & detection with computer vision.">
+  <link rel="preload" href="assets/css/styles.css" as="style">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script defer src="assets/js/main.js"></script>
+</head>
+<body>
+<header class="site">
+  <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <h1>Supermarket Fresh Food CV</h1>
+    </div>
+    <nav aria-label="Primary">
+      <ul><li><a href="index.html">Home</a></li><li><a href="datasets.html" aria-current="page">Datasets</a></li><li><a href="methods.html">Methods</a></li><li><a href="hands-on.html">Hands‑on</a></li><li><a href="applications.html">Applications</a></li><li><a href="limitations.html">Limitations</a></li><li><a href="quiz.html">Quiz</a></li><li><a href="bibliography.html">Bibliography</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main>
+  <div class="container">
+
+<section class="card">
+  <h2>Datasets & Benchmarks</h2>
+  <p>
+    We focus on <em>fresh produce</em> datasets and <em>retail shelf</em> benchmarks common in supermarket scenarios.
+    Replace the placeholders with your chosen datasets and add proper figure legends and citations (e.g., [<a href="bibliography.html#ref-1">1</a>]).
+  </p>
+  <div class="audio-block">
+    <strong>Voice-over:</strong>
+    <audio controls src="assets/audio/sample.wav" aria-label="Datasets narration"></audio>
+  </div>
+</section>
+
+<section class="grid">
+  <figure>
+    <img src="assets/img/fig4.svg" loading="lazy" alt="Dense shelf with occlusion placeholder">
+    <figcaption>Dense shelves & occlusions — motivates retail-specific metrics.</figcaption>
+  </figure>
+  <figure>
+    <img src="assets/img/fig5.svg" loading="lazy" alt="Evaluation metrics placeholder">
+    <figcaption>Metrics: mAP (IoU), Locount (localize+count), latency.</figcaption>
+  </figure>
+</section>
+
+<section class="card">
+  <h3>Suggested Benchmarks (replace with your picks)</h3>
+  <table>
+    <thead><tr><th>Dataset</th><th>Domain</th><th>#Classes</th><th>#Images</th><th>Notes</th><th>Ref</th></tr></thead>
+    <tbody>
+      <tr><td>FV40</td><td>Produce</td><td>40</td><td>~14k</td><td>Fruit/vegetable detection</td><td>[<a href="bibliography.html#ref-1">1</a>]</td></tr>
+      <tr><td>SKU-110K</td><td>Retail shelf</td><td>110k SKU</td><td>~11k</td><td>Dense, similar items</td><td>[<a href="bibliography.html#ref-2">2</a>]</td></tr>
+      <tr><td>RPC</td><td>Checkout</td><td>Fine-grained</td><td>—</td><td>Multi-item scenes</td><td>[<a href="bibliography.html#ref-3">3</a>]</td></tr>
+    </tbody>
+  </table>
+</section>
+
+  </div>
+</main>
+<footer class="site">
+  <div class="container">
+    <div>© 2025 · Your Name · <span class="badge">GitHub Pages ready</span></div>
+    <div><small class="muted">Replace placeholder images/audio and fill bibliography before submission.</small></div>
+  </div>
+</footer>
+</body>
+</html>
