@@ -1,78 +1,395 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home · Supermarket Fresh Food CV Tutorial</title>
-  <meta name="description" content="A graduate-level web tutorial on supermarket fresh food (fruits/vegetables) recognition & detection with computer vision.">
-  <link rel="preload" href="assets/css/styles.css" as="style">
-  <link rel="stylesheet" href="assets/css/styles.css">
-  <script defer src="assets/js/main.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>智能冰箱中的食品识别：用深度学习减少浪费</title>
+  <meta name="description" content="一份在线研究型教程：综述智能冰箱食品识别的传统方案与深度学习方法，讲解 BroadFPN-YOLACT 与 Simu-Augmentation，并给出实验结果、代码示例与测验。" />
+  <style>
+    :root{
+      --bg:#0b1020; --card:#121933; --ink:#e9edf7; --muted:#98a2c7; --accent:#8bc3ff; --good:#6ee7a8; --bad:#fca5a5;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(1200px 600px at 20% -5%,#1b2657 0%,#0b1020 50%,#0b1020 100%);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Arial;}
+    header{position:sticky;top:0;z-index:50;background:rgba(11,16,32,.8);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,.08)}
+    .container{max-width:1100px;margin:0 auto;padding:0 16px}
+    nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:12px 0}
+    nav .brand{font-weight:700;letter-spacing:.3px}
+    nav a{color:var(--ink);text-decoration:none;padding:8px 10px;border-radius:10px}
+    nav a:hover, nav a.active{background:rgba(255,255,255,.08)}
+    main section{scroll-margin-top:72px;padding:56px 0;border-bottom:1px dashed rgba(255,255,255,.08)}
+    h1,h2{line-height:1.15;margin:.2em 0 .4em}
+    h1{font-size:clamp(28px,3.6vw,40px)}
+    h2{font-size:clamp(22px,2.6vw,28px)}
+    p{color:#d7dcf1;line-height:1.75}
+    .grid{display:grid;gap:18px}
+    .cols-2{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.06);border-radius:18px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    .caption{font-size:12px;color:var(--muted);margin-top:6px}
+    .pill{display:inline-block;padding:4px 10px;border:1px solid rgba(255,255,255,.16);border-radius:999px;font-size:12px;color:var(--muted);margin-right:6px}
+    .btn{display:inline-block;background:linear-gradient(90deg,#2a6cff,#46b3ff);color:#fff;padding:10px 14px;border-radius:12px;text-decoration:none;border:none;cursor:pointer}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .img{width:100%;height:220px;border-radius:14px;background:#0e1530 url('assets/img/placeholder-1.jpg') center/cover no-repeat;border:1px solid rgba(255,255,255,.08)}
+    .img.alt2{background-image:url('assets/img/placeholder-2.jpg')}
+    .img.alt3{background-image:url('assets/img/placeholder-3.jpg')}
+    .img.alt4{background-image:url('assets/img/placeholder-4.jpg')}
+    .img.alt5{background-image:url('assets/img/placeholder-5.jpg')}
+    pre{overflow:auto;background:#0e1530;border:1px solid rgba(255,255,255,.08);padding:16px;border-radius:14px}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:13px}
+    .table{width:100%;border-collapse:collapse}
+    .table th,.table td{border-bottom:1px solid rgba(255,255,255,.08);padding:10px 8px;text-align:left}
+    .kpi{display:flex;gap:12px;flex-wrap:wrap}
+    .kpi .chip{padding:8px 10px;background:#0e1530;border:1px solid rgba(255,255,255,.08);border-radius:12px}
+    .audio-row{display:flex;gap:10px;align-items:center;margin:.5rem 0;color:var(--muted)}
+    .quiz{display:grid;gap:12px;margin-top:14px}
+    .quiz .option{padding:10px;border:1px solid rgba(255,255,255,.16);border-radius:12px;cursor:pointer}
+    .quiz .option.correct{outline:2px solid var(--good)}
+    .quiz .option.wrong{outline:2px solid var(--bad)}
+    footer{padding:40px 0;color:var(--muted)}
+    .small{font-size:13px}
+    .legend{font-size:12px;color:var(--muted)}
+    a.ref{color:var(--accent);text-decoration:underline dotted}
+  </style>
 </head>
 <body>
-<header class="site">
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
-    <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
-      <h1>Supermarket Fresh Food CV</h1>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">智能冰箱食品识别 · 在线教程</div>
+        <div class="links">
+          <a href="#intro" class="active">首页</a>
+          <a href="#background">背景</a>
+          <a href="#dl">深度学习方法</a>
+          <a href="#method">BroadFPN-YOLACT</a>
+          <a href="#exp">实验与结果</a>
+          <a href="#apps">应用与局限</a>
+          <a href="#quiz">互动测验</a>
+          <a href="#refs">注释书目</a>
+        </div>
+      </nav>
     </div>
-    <nav aria-label="Primary">
-      <ul><li><a href="index.html" aria-current="page">Home</a></li><li><a href="datasets.html">Datasets</a></li><li><a href="methods.html">Methods</a></li><li><a href="hands-on.html">Hands‑on</a></li><li><a href="applications.html">Applications</a></li><li><a href="limitations.html">Limitations</a></li><li><a href="quiz.html">Quiz</a></li><li><a href="bibliography.html">Bibliography</a></li></ul>
-    </nav>
-  </div>
-</header>
-<main>
-  <div class="container">
+  </header>
 
-<section class="card">
-  <h2>Welcome — What & Why</h2>
-  <p>
-    This graduate-level tutorial reviews <strong>supermarket fresh food (fruits/vegetables) recognition & object detection</strong>.
-    You’ll learn key datasets, algorithms (YOLO family, DETR, Soft-NMS/EM-Merger), evaluation, applications for kid-friendly
-    education, and build a small demo.
-  </p>
-  <div class="audio-block">
-    <strong>Voice-over:</strong>
-    <audio controls src="assets/audio/sample.wav" aria-label="Intro narration"></audio>
-    <small class="muted">Replace with your voice recording for this page.</small>
-  </div>
-</section>
+  <main class="container">
 
-<section class="grid">
-  <figure>
-    <img src="assets/img/fig1.svg" loading="lazy" alt="Produce aisle illustration placeholder">
-    <figcaption>Produce aisle context — cite your image source in the legend.</figcaption>
-  </figure>
-  <figure>
-    <img src="assets/img/fig2.svg" loading="lazy" alt="Detection pipeline diagram placeholder">
-    <figcaption>Pipeline: data → model → post-processing → metrics.</figcaption>
-  </figure>
-  <figure>
-    <img src="assets/img/fig3.svg" loading="lazy" alt="YOLO vs DETR comparison diagram placeholder">
-    <figcaption>One-stage vs Transformer-based detectors (overview).</figcaption>
-  </figure>
-</section>
+    <!-- Intro -->
+    <section id="intro">
+      <span class="pill">阅读时间 20–30 分钟</span>
+      <span class="pill">面向研究生</span>
+      <h1>用深度学习识别冰箱中的食物：从传统方案到 BroadFPN-YOLACT</h1>
+      <p>
+        本教程带你从智能冰箱的传统识别方案出发，系统了解深度学习在家庭场景的落地路径，重点解读
+        <a class="ref" href="#r1">[1]</a> 提出的 BroadFPN-YOLACT 与 Simu-Augmentation，
+        并比较与常见模型（如 YOLOv8）在不同距离、遮挡与背景下的表现。
+        目标是帮助你理解“为什么有效、如何实现、适用边界与未来方向”，从而能复现或改造该系统。
+      </p>
 
-<section class="card">
-  <h3>How to Navigate (15–30 minutes total)</h3>
-  <ol>
-    <li><a href="datasets.html">Datasets</a> (3–5 min)</li>
-    <li><a href="methods.html">Methods</a> (7–10 min) — includes code snippet & comparisons</li>
-    <li><a href="hands-on.html">Hands‑on</a> (5–8 min) — run a tiny demo</li>
-    <li><a href="applications.html">Applications</a> (2–3 min)</li>
-    <li><a href="limitations.html">Limitations</a> (2–3 min)</li>
-    <li><a href="quiz.html">Quiz</a> (2–4 min)</li>
-    <li><a href="bibliography.html">Bibliography</a> — annotated references</li>
-  </ol>
-</section>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="img"></div>
+          <div class="legend">图 1：带摄像头的智能冰箱示意（请替换为你自己的图片或来自 <a class="ref" href="#r1">[1]</a> 的重绘/授权图像）。</div>
+        </div>
+        <div class="card">
+          <h2>快速要点</h2>
+          <div class="kpi">
+            <div class="chip">减少食物浪费</div>
+            <div class="chip">实时检测</div>
+            <div class="chip">小目标识别</div>
+            <div class="chip">复杂背景鲁棒</div>
+          </div>
+          <p class="small">
+            根据 <a class="ref" href="#r1">[1]</a>：通过在 YOLACT 的 FPN 中新增 P2 层以增强小物体特征，配合两阶段 Simu-Augmentation，
+            在 60–100cm 距离段取得显著 mAP 提升（相对基础 YOLACT/YOLOv8n）。见“实验与结果”章节的表格与图示。
+          </p>
+        </div>
+      </div>
 
-  </div>
-</main>
-<footer class="site">
-  <div class="container">
-    <div>© 2025 · Your Name · <span class="badge">GitHub Pages ready</span></div>
-    <div><small class="muted">Replace placeholder images/audio and fill bibliography before submission.</small></div>
-  </div>
-</footer>
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/intro.mp3">你的浏览器不支持音频。</audio>
+        <span class="small">（请将 <code>assets/audio/intro.mp3</code> 替换为你录制的讲解音频）</span>
+      </div>
+    </section>
+
+    <!-- Background -->
+    <section id="background">
+      <h2>一、背景：从条码/RFID/传感到 AI 图像识别</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <p>
+            传统方法：条码扫描、RFID 标签、重量/气味/光感等传感融合，能做库存状态监测，
+            但无法识别无条码的果蔬、需要手工贴标，且难以凭重量/气味准确区分具体品类
+            （概述见 <a class="ref" href="#r1">[1]</a>）。随着计算机视觉发展，CNN、ResNet、Inception、YOLO、MobileNet
+            等模型被广泛用于食物识别与营养评估 <a class="ref" href="#r2">[2]</a><a class="ref" href="#r3">[3]</a><a class="ref" href="#r4">[4]</a>。
+          </p>
+          <ul class="small">
+            <li>优点：非接触、即拿即识、可扩展到多类别。</li>
+            <li>挑战：距离变化、小目标、手持姿态、遮挡、反光、复杂背景。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="img alt2"></div>
+          <div class="legend">图 2：传统方案示例图片占位（条码/RFID/传感器），请替换并在图注标明来源。</div>
+        </div>
+      </div>
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/background.mp3"></audio>
+      </div>
+    </section>
+
+    <!-- DL -->
+    <section id="dl">
+      <h2>二、食物识别中的深度学习基石</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <p>
+            常用架构与定位：ResNet（残差单元，缓解梯度消失，便于更深网络）；Inception V3（多尺寸卷积并行）；YOLO 系列（端到端实时检测）；
+            MobileNet（轻量化，适合边缘端）等 <a class="ref" href="#r1">[1]</a>。
+          </p>
+          <div class="img alt3"></div>
+          <div class="legend">图 3：典型 CNN/检测网络示意占位（请替换为你自绘示意图）。</div>
+        </div>
+        <div class="card">
+          <h3>为什么 FPN 有用？</h3>
+          <p class="small">
+            FPN 通过自顶向下+横向连接融合多尺度特征（P3–P7），下层分辨率高、上层语义强，
+            有助于同时检测大小不一的目标（详见 <a class="ref" href="#r1">[1]</a> 第 3 页图 2）。
+          </p>
+          <pre><code>// FPN 直觉小结（非代码）：
+// 高层：语义强但分辨率低；低层：细节多但语义弱
+// FPN 融合它们 → 对小目标&远距离物体更友好</code></pre>
+        </div>
+      </div>
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/dl.mp3"></audio>
+      </div>
+    </section>
+
+    <!-- Method -->
+    <section id="method">
+      <h2>三、BroadFPN-YOLACT 与 Simu-Augmentation（核心方法）</h2>
+
+      <div class="card">
+        <h3>1) BroadFPN-YOLACT：给 YOLACT 的 FPN 添一层 P2</h3>
+        <p>
+          论文 <a class="ref" href="#r1">[1]</a> 在 YOLACT 的 FPN 基础上新增 P2 层（连接 C2 特征），
+          以更高分辨率捕获细粒度细节，提升小目标/远距离场景下的检测效果（见第 3–4 页图 2、图 3）。
+        </p>
+        <div class="img alt4"></div>
+        <div class="legend">图 4：BroadFPN-YOLACT 结构图占位（建议根据 <a class="ref" href="#r1">[1]</a> 图 3 自绘/重制）。</div>
+        <pre><code># 伪代码：展示 P2 的引入逻辑（教学示例，非完整可运行）
+class BroadFPN_YOLACT(nn.Module):
+    def __init__(self, backbone=ResNet101()):
+        super().__init__()
+        self.backbone = backbone                      # 输出 {C2, C3, C4, C5}
+        self.fpn = FPN(levels=["P3","P4","P5","P6","P7"])
+        self.p2_reduce = nn.Conv2d(256, 256, 1)       # 对 C2 降通道
+        self.p2 = nn.Conv2d(256, 256, 3, padding=1)   # 形成 P2
+        self.head = PredictionHead()
+    def forward(self, x):
+        feats = self.backbone(x)          # feats["C2"] 分辨率最高
+        pyramid = self.fpn(feats)         # 得到 P3..P7
+        p2 = self.p2(self.p2_reduce(feats["C2"]))
+        pyramid["P2"] = p2                # 扩展后的金字塔
+        return self.head(pyramid)</code></pre>
+      </div>
+
+      <div class="card">
+        <h3>2) Simu-Augmentation：两阶段“更像真实世界”的增强</h3>
+        <p>
+          阶段 A（目标级）：对物体本身做尺度、旋转、模糊、光照、畸变等变换。<br/>
+          阶段 B（场景级）：把增强后的目标置入不同背景，并模拟“手持姿态/遮挡/不同面”的真实场景。
+          见 <a class="ref" href="#r1">[1]</a> 第 5–6 页图 5、图 6 与第 9 页图 8。
+        </p>
+        <div class="img alt5"></div>
+        <div class="legend">图 5：Simu-Augmentation 示例占位（建议自制示意图并标明来源）。</div>
+        <pre><code>// 伪流程（教学示例）：
+for obj in objects:
+  obj_aug = augment_object(obj, scale/rotate/blur/distort/light)
+  for bg in backgrounds:
+    scene = compose(obj_aug, bg, handheld_pose, occlusion)
+    save(scene, label_bbox_class)</code></pre>
+      </div>
+
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/method.mp3"></audio>
+      </div>
+    </section>
+
+    <!-- Experiments -->
+    <section id="exp">
+      <h2>四、实验与结果（复现实验思路）</h2>
+      <div class="card">
+        <p>
+          数据集 1：30+ 种小体积商品，每类 &gt;100 张，增强后每类约 2 万张；数据集 2：80+ 种混合食品（熟食、饮料、蔬菜等），
+          场景包含 20–60cm 与 60–100cm 等不同距离、不同手持姿态/遮挡/反光和背景（详见 <a class="ref" href="#r1">[1]</a> 第 6–8、10–11 页与图 7–10）。
+        </p>
+        <table class="table small">
+          <thead><tr><th>距离段</th><th>指标</th><th>YOLACT</th><th>YOLOv8n</th><th><strong>BroadFPN-YOLACT</strong></th></tr></thead>
+          <tbody>
+            <tr><td>&lt;20cm</td><td>mAP@50</td><td>~92–95%</td><td>~94–96%</td><td><strong>~96–97%</strong></td></tr>
+            <tr><td>20–60cm</td><td>mAP@50</td><td>~93–95%</td><td>~97%</td><td><strong>~97%+</strong></td></tr>
+            <tr><td>60–100cm</td><td>mAP@50</td><td>72–87%</td><td>90–95%</td><td><strong>95–97%</strong></td></tr>
+          </tbody>
+        </table>
+        <p class="caption">注：上表为对 <a class="ref" href="#r1">[1]</a> 表 1/表 2 的范围化摘要，详数请参见原表（第 7、11 页）。</p>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="img"></div>
+          <div class="legend">图 6：不同距离的对比检测结果占位（参考 <a class="ref" href="#r1">[1]</a> 图 7）。</div>
+        </div>
+        <div class="card">
+          <div class="img alt2"></div>
+          <div class="legend">图 7：不同姿态/遮挡/模糊的鲁棒性示例占位（参考 <a class="ref" href="#r1">[1]</a> 图 8）。</div>
+        </div>
+      </div>
+
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/exp.mp3"></audio>
+      </div>
+    </section>
+
+    <!-- Applications -->
+    <section id="apps">
+      <h2>五、应用、工程建议与局限</h2>
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>应用</h3>
+          <ul>
+            <li>家庭库存管理与减少浪费（购物清单、到期提醒）。</li>
+            <li>健康饮食记录（与营养估计结合 <a class="ref" href="#r2">[2]</a>）。</li>
+            <li>零售/商用冷柜的低成本视觉盘点。</li>
+          </ul>
+          <h3>工程建议</h3>
+          <ul class="small">
+            <li>摄像头视场建议 ≥75°，放置在门内上沿，配合门开关触发采集。</li>
+            <li>推理端优先选择 GPU 或 NPU 模块；无加速时可用 MobileNet 轻量化版本做边缘预筛。</li>
+            <li>数据采集要覆盖距离/角度/遮挡/反光/不同货架与背景。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>局限与未来</h3>
+          <ul>
+            <li>当前对无包装自制食物与日期识别支持有限；论文提出未来扩展到自制食物与保质期解析 <a class="ref" href="#r1">[1]</a>。</li>
+            <li>家庭多用户与光照剧变仍需更强的域泛化。</li>
+          </ul>
+          <div class="img alt3"></div>
+          <div class="legend">图 8：应用场景插图占位（请替换并注明来源）。</div>
+        </div>
+      </div>
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/apps.mp3"></audio>
+      </div>
+    </section>
+
+    <!-- Quiz -->
+    <section id="quiz">
+      <h2>六、互动测验</h2>
+      <p>选择最合适的答案，并查看解析：</p>
+
+      <div class="card">
+        <p><strong>Q1.</strong> 如果主要问题是 60–100cm 远距离下的小目标识别，首要的模型改动应是？</p>
+        <div class="quiz" data-quiz="1" data-answer="b" data-explain="在 FPN 中加入更高分辨率层（如 P2）以保留细粒度特征，是提升远距离小目标识别的关键（见 [1] 图 3、表 1/2）。">
+          <div class="option" data-key="a">把输入分辨率从 550 升到 1024</div>
+          <div class="option" data-key="b">在 FPN 加 P2，增强低层高分辨率特征</div>
+          <div class="option" data-key="c">仅增加数据量，不改网络</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <p><strong>Q2.</strong> 为提升“手持姿态/遮挡/复杂背景”下的鲁棒性，下列哪种增强最贴近真实？</p>
+        <div class="quiz" data-quiz="2" data-answer="c" data-explain="Simu-Augmentation 分两阶段：先目标级，再场景级合成到不同背景与手持姿态，贴近真实（见 [1] 图 5/6/8）。">
+          <div class="option" data-key="a">仅做颜色抖动与随机裁剪</div>
+          <div class="option" data-key="b">GAN 合成全新类别</div>
+          <div class="option" data-key="c">两阶段 Simu-Augmentation（目标级 + 场景级）</div>
+        </div>
+      </div>
+
+      <p id="quiz-result" class="small"></p>
+
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/quiz.mp3"></audio>
+      </div>
+    </section>
+
+    <!-- Refs -->
+    <section id="refs">
+      <h2>七、带注释的参考文献（Annotated Bibliography）</h2>
+      <ol>
+        <li id="r1"><strong>[1] Dai, X. Y. (2024)</strong>. Robust deep-learning based refrigerator food recognition. <em>Frontiers in Artificial Intelligence</em>, 7:1442948。<br/>
+          <em>Synopsis：</em> 提出 BroadFPN-YOLACT 与两阶段 Simu-Augmentation，应对距离/遮挡/背景复杂度；在多距离段取得更高 mAP/Precision/Recall/F1。<br/>
+          <em>Reliability：</em> 同行评审期刊，实验充分、开源可读性高。<br/>
+          <span class="caption">（本教程多处数字/图示均据此文整理与复述；若使用论文原图，请遵循其 CC BY 许可并注明出处。）</span>
+        </li>
+        <li id="r2"><strong>[2] Mezgec, S., &amp; Koroušić, S. B. (2017)</strong>. NutriNet: a deep learning food and drink image recognition system for dietary assessment. <em>Nutrients</em>, 9:657。<br/>
+          <em>Synopsis：</em> 基于 CNN 的饮食识别系统，展示了深度学习在营养记录的潜力。<br/>
+          <em>Reliability：</em> 期刊论文，研究严谨、被广泛引用。
+        </li>
+        <li id="r3"><strong>[3] Lubura, J., et al. (2022)</strong>. Food recognition and food waste estimation using CNN. <em>Electronics</em>, 11:3746。<br/>
+          <em>Synopsis：</em> 使用 CNN 进行食物识别与浪费估计，强调计算机视觉在减少浪费中的作用。<br/>
+          <em>Reliability：</em> 期刊论文，实验完整。
+        </li>
+        <li id="r4"><strong>[4] Xiao, B., Nguyen, M., &amp; Yan, W. Q. (2024)</strong>. Fruit ripeness identification using YOLOv8. <em>Multimedia Tools and Applications</em>。<br/>
+          <em>Synopsis：</em> 用 YOLOv8 做水果成熟度识别，展示 YOLO 系列在食品相关任务的实时性与鲁棒性。<br/>
+          <em>Reliability：</em> 期刊论文，应用导向。
+        </li>
+        <li id="r5"><strong>[5] Hossain, S., &amp; Abdelgawad, A. (2018)</strong>. Smart refrigerator based on IoT: An approach to efficient food management. ACM Smart Digital Environment。<br/>
+          <em>Synopsis：</em> 以 IoT 视角实现智能冰箱的库存管理（非视觉方案），可与视觉识别互补。<br/>
+          <em>Reliability：</em> 会议论文，可靠性中等但背景相关。
+        </li>
+      </ol>
+
+      <p class="small">在正文中引用请使用超链接编号（如 <a class="ref" href="#r1">[1]</a>），并在图片图注内标出来源与许可。若使用外部图片/视频/音频，请确保版权合规。</p>
+
+      <div class="audio-row">
+        <strong>本页语音讲解：</strong>
+        <audio controls src="assets/audio/refs.mp3"></audio>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container small">
+      © 2025 你的名字 · 本站用于教学演示。内容基于公开论文与资料复述，保留原作者署名与许可要求。<br/>
+      性能提示：全站为单页应用（SPA），图片与音频懒加载/压缩可进一步加速加载时间。
+    </div>
+  </footer>
+
+  <script>
+    // 简单导航高亮
+    const links=[...document.querySelectorAll('nav a')];
+    const secs=[...document.querySelectorAll('main section')];
+    const obs=new IntersectionObserver(es=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          links.forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#'+e.target.id));
+        }
+      })
+    },{rootMargin:"-40% 0px -50% 0px",threshold:0});
+    secs.forEach(s=>obs.observe(s));
+
+    // 互动测验
+    document.querySelectorAll('.quiz').forEach(block=>{
+      block.addEventListener('click', e=>{
+        const opt=e.target.closest('.option');
+        if(!opt) return;
+        block.querySelectorAll('.option').forEach(o=>o.classList.remove('correct','wrong'));
+        const answer=block.dataset.answer;
+        const chosen=opt.dataset.key;
+        if(chosen===answer){ opt.classList.add('correct'); } else { opt.classList.add('wrong'); }
+        const explain=block.dataset.explain || '';
+        document.getElementById('quiz-result').textContent = '解析：' + explain;
+      });
+    });
+  </script>
 </body>
 </html>
