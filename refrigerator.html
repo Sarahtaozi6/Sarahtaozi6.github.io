@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Refrigerator</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  
+<header>
+  <div class="container">
+    <nav>
+      <div class="brand">Food Identification · Online Tutorial</div>
+        <div class="links"><a href="index.html" class="">Home</a><a href="refrigerator.html" class="">Refrigerator</a><a href="dl.html" class="">Real-world environments</a><a href="quiz.html" class="">Quiz</a><a href="refs.html" class="">References</a></div>
+    </nav>
+  </div>
+</header>
+  <main class="container">
+
+      <section id="bg" class="lesson">
+          <style>
+              .lesson h2{font-size:1.6rem;margin:0 0 .75rem}
+              .lesson h3{font-size:1.15rem;margin:1rem 0 .4rem}
+              .lesson p{line-height:1.7;margin:.4rem 0}
+              .lesson ul{margin:.35rem 0 .75rem 1.2rem}
+              .key{background:#eef7ff;border-left:3px solid #3b82f6;padding:.6rem .7rem;border-radius:.4rem}
+              .tag{display:inline-block;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:999px;padding:.12rem .6rem;margin-right:.25rem;font-size:.78rem}
+              .mini{font-size:.9rem;color:#475569}
+              .foot{font-size:.86rem;color:#64748b;margin-top:.6rem}
+              .ref a{color:#2563eb;text-decoration:none;border-bottom:1px dotted #93c5fd}
+              .bq{margin:.6rem 0;padding:.6rem .7rem;background:#fff7ed;border-left:3px solid #fb923c;border-radius:.4rem}
+              .code{font-family:ui-monospace, SFMono-Regular, Menlo, monospace;background:#0b1220;color:#e2e8f0;border-radius:.4rem;padding:.6rem .7rem;overflow-x:auto;font-size:.9rem}
+          </style>
+
+          <h1>Food Identification in Refrigerators</h1>
+
+          <audio controls preload="metadata" style="width:100%">
+              <source src="/assets/fridge.mp3" type="audio/mpeg">
+              Your browser does not support the audio element.
+          </audio>
+<br>
+          <br>
+<br>
+
+          <h2>1. Background: From Barcode/RFID/Sensors to <strong>AI-based Visual Food Identification</strong></h2>
+          <section id="background">
+              <div class="grid cols-2">
+                  <div class="card">
+                      <p>
+                          Managing refrigerator food items is challenging because items that are “out of sight, out of mind” problem, which leads to <em>over-purchasing</em> and <em>waste</em>. Traditional solutions such as barcode scanning, RFID tagging sensors can monitor stock levels but fail when facing
+                          unlabeled occluded, distance and small food items in real-world refrigerator scenarios.
+                      </p>
+                      <ul class="medium">
+                          <li><strong>Barcode scanning:</strong> Only works for labeled items; unpackaged food or home-cooked food cannot be recognized.
+                              </li>
+                          <li><strong>RFID:</strong> Requires manual labeling; costly and labor-intensive.</li>
+                          <li><strong>Generic vision models (close-range):</strong> Often fail with occlusion, backlight/glare, and longer distances.</li>
+
+                      </ul>
+                  </div>
+                  <div class="card">
+                      <img class="img" src="./assets/food.png"
+                           alt="Fridge motivation illustration"
+                           loading="lazy" decoding="async">
+                      <div class="legend">ImageSource: AI-generated illustration.</div>
+                  </div>
+              </div>
+          </section>
+
+          <h2 id="how-it-works">2. How it Works</h2>
+          <section id="background1">
+              <div class="grid cols-2">
+                  <div class="card">
+                      <p>
+                          How it works (real time): when the door opens, the webcam starts streaming frames to a local GPU PC;
+                          a one-stage model (BroadFPN-YOLACT) runs per-frame inference and overlays the label (e.g., “cola”),
+                          then logs the item to inventory. See Dai (2024) Fig.1. <a href="refs.html#r1">[1]</a></p>
+                          <ul class="mini">
+                              <li>Real-time recognition: Each door event is captured; the camera classifies the item and whether it’s entering or leaving.</li>
+                              <li>Immediate inventory update: The system logs/updates item ID, quantity, in/out state, timestamp (and optional expiry/owner), keeping the ledger current.</li>
+                              <li>Actionable prevention: Using these records, it triggers reminders, avoids duplicate purchases, suggests consumption plans, and auto-curates shopping lists—directly reducing food waste.</li>
+                          </ul>
+
+                  </div>
+                  <div class="card">
+                      <img
+                              class="img"
+                              src="./assets/f1.png"
+                              alt="Dai (2024) Figure 1: Smart refrigerator with camera input; item recognized as 'cola'"
+                              loading="lazy" decoding="async"
+                      >
+                      <div class="legend">
+                          Figure 1. Smart refrigerator with camera input. Source: Dai (2024), Fig.1,
+                          <a href="refs.html#r1">[1]</a>
+                      </div>
+                  </div>
+              </div>
+          </section>
+          <p>Next, let’s talk about the technologies used and how the food recognition works.</p>
+          <section id="method">
+              <h2>3. AIModels and Method</h2>
+              <div class="card">
+                  <h3>1) YOLACT to BroadFPN-YOLACT</h3>
+                  <p>
+                      Use <strong>YOLACT</strong><a class="ref" href="refs.html#r3">[3]</a> as the base recognition model.
+                      YOLACT (You Only Look At Coefficients) is a <em>one-stage</em> deep network for real-time instance segmentation and object detection.
+                      During training, it employs a backbone (e.g., ResNet) to extract features, generates <em>prototype masks</em>, and combines them with
+                      learned coefficients to produce instance-specific masks. The network optimizes its losses
+                      end-to-end and iteratively tunes based on validation performance. Building on this framework, we extend YOLACT with a broader feature
+                      pyramid and name the resulting model <strong>BroadFPN-YOLACT</strong><a class="ref" href="refs.html#r1">[1]</a>.
+                  </p>
+                  <img
+                          class="img"
+                          src="./assets/YOLACT.png"
+                          alt=""
+                          loading="lazy" decoding="async"
+                  >
+                  <div class="legend">
+                      YOLACT for real-time and robust instance segmentation of medical instruments in endoscopic procedures. ImageSource:.
+
+                      <a href="https://arxiv.org/abs/2103.15997" target="_blank" rel="noopener">Link</a>.
+                      <a href="refs.html#r5">[5]</a></div>
+                  <img
+                          class="img"
+                          src="./assets/1.png"
+                          alt=""
+                          loading="lazy" decoding="async"
+                  >
+                  <div class="legend">
+                       BroadFPN-YOLACT ImageSource:
+                          <a href="refs.html#r1">[1]</a> </div>
+
+              </div>
+
+              <p>Sample images used in this experiment. Panel (A) shows three inputs of a small beverage cup captured at different distances from the camera: (A-1) within 20 cm, (A-2) ≈50 cm, and (A-3) ≈80 cm. Panel (B) presents detection and recognition results of the baseline YOLACT, whereas Panel (C) shows results of the proposed BroadFPN-YOLACT. Blue rectangles indicate detected regions; white text on a blue tag shows the predicted label with confidence. Images with various distortions challenge detection accuracy; missed recognitions are marked with red rectangles. The results indicate that the baseline struggles at very near and far ranges, while BroadFPN-YOLACT successfully recognizes objects at substantially longer distances.</p>
+              <br>
+              <img
+                      class="img"
+                      src="./assets/e.png"
+                      alt="Sample results of Experiment 1. (A) Examples of a small object captured at various distances from the camera; (B) Results using the existing YOLACT
+model; (C) Results using the BroadFPN-YOLACT model."
+                      loading="lazy" decoding="async"
+              >
+              <div class="legend">
+                  Sample results of Experiment 1. (A) Examples of a small object captured at various distances from the camera; (B) Results using the existing YOLACT
+                  model; (C) Results using the BroadFPN-YOLACT model. ImageSource:
+                  <a href="refs.html#r1">[1]</a> </div>
+              <br>
+
+
+              <div class="card">
+                  <h3>2)Simu-Augmentation <sup><a class="ref" href="refs.html#r1">[1]</a></sup></h3>
+                  <p>
+                      Training deep learning models requires large, well-annotated datasets that closely resemble real deployment conditions. For food recognition in smart refrigerators, inputs are highly diverse: when users place or retrieve items, they may hold them in different ways, causing partial occlusion or changes in the item’s orientation relative to the camera. Portions of the background—such as the refrigerator interior or the user’s body—are often captured alongside the item, and these elements can vary substantially.
+                      Conventional augmentation (e.g., scaling, rotation, color jitter, cropping) increases dataset diversity but typically fails to reproduce the full complexity of real scenes. This mismatch between artificially augmented data and in-the-wild imagery can limit performance, as models trained under such conditions may generalize poorly.
+
+                      To bridge this gap, we introduce <strong>Simu-Augmentation</strong>
+                      <a class="ref" href="refs.html#r1">[1]</a>—a scene-based, realism-oriented augmentation strategy that generates training examples closely aligned with actual usage. The name combines “simulation” and “augmentation,” highlighting our goal of producing object- and scene-level transformations that emulate occlusion, viewpoint changes, and background variability. We use this term throughout the remainder of this work. Consider the experiments below：
+                  </p>
+                  <img
+                          class="img"
+                          src="./assets/e2.png"
+                          alt=""
+                          loading="lazy" decoding="async"
+                  >
+                  <div class="legend">
+                      Sample results of Experiment 2. (A) Examples of processing images; (B) Results using the existing approach; (C) Results using the proposed integrated approach. ImageSource:
+                      <a href="refs.html#r1">[1]</a> </div>
+                  <br>
+                  <img
+                          class="img"
+                          src="./assets/t.png"
+                          alt=""
+                          loading="lazy" decoding="async"
+                  >
+                  <div class="legend">
+                      Comparison of AI models and data augmentation approaches using dataset. ImageSource:
+                      <a href="refs.html#r1">[1]</a> </div>
+
+              </div>
+              <p>The experiments show that the proposed method outperforms existing approaches, accurately recognizing foods of various sizes and remaining robust across different distances and poses. This indicates strong potential for deployment in home environments, where such factors routinely vary.</p>
+          </section>
+
+
+          <h2>4. Strengths & Applications</h2>
+          <ul class="mini">
+              <li><strong>Low-cost, single-AI camera, real time:</strong> Instant recognition enables live inventory updates, alerts, and waste-reduction nudges.</li>
+              <li><strong>Robust in the home:</strong> Handles small items, longer distances, hand-held angles, partial occlusion, and clutter typical of refrigerators.</li>
+              <li><strong>Practical uses:</strong> automatic logging, duplicate-purchase warnings, consumption suggestions, and shopping-list assistance.</li>
+          </ul>
+
+          <h2 class="mt-xl">5. Limitations / Future Work</h2>
+          <ul class="mini">
+              <li><strong>Challenging optics:</strong> Extreme glare/condensation, low light, strong backlight, motion blur, and heavy occlusion hurt accuracy.</li>
+              <li><strong>Open-set risk:</strong> Novel or out-of-distribution items can be misclassified with high confidence.</li>
+              <li><strong>Privacy & deployment:</strong> Cameras may capture people; clear on-device processing and retention policies are needed.</li>
+              <li><strong>Future work:</strong> Extend to home-made items and integrate expiry-date reading to enable comprehensive nutrition and spoilage management
+                  <a class="ref" href="refs.html#r1">[1]</a>.
+              </li>
+          </ul>
+
+      </section>
+
+  </main>
+  <footer>
+    <div class="container small">
+        © 2025 Food Identification · Online Tutorial. All rights reserved.<br/>
+    </div>
+  </footer>
+  <script>
+
+      document.addEventListener('DOMContentLoaded', function () {
+          let file = location.pathname.split('/').pop() || 'index.html';
+          file = file.split('?')[0].split('#')[0]; // 去掉参数和锚点
+
+          document.querySelectorAll('nav .links a').forEach(a => {
+              if (a.getAttribute('href') === file) {
+                  a.classList.add('active');
+              }
+          });
+      });
+
+    document.querySelectorAll('.quiz').forEach(block=>{
+      block.addEventListener('click', e=>{
+        const opt=e.target.closest('.option');
+        if(!opt) return;
+        block.querySelectorAll('.option').forEach(o=>o.classList.remove('correct','wrong'));
+        const answer=block.dataset.answer;
+        const chosen=opt.dataset.key;
+        if(chosen===answer){ opt.classList.add('correct'); } else { opt.classList.add('wrong'); }
+        const explain=block.dataset.explain || '';
+        const res = document.getElementById('quiz-result');
+        if(res) res.textContent = '解析：' + explain;
+      });
+    });
+  </script>
+</body>
+</html>
