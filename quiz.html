@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interactive Quiz</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body class="page-quiz">
+
+<header>
+    <div class="container">
+        <nav>
+            <div class="brand">Food Identification · Online Tutorial</div>
+            <div class="links">
+                <a href="index.html">Home</a>
+                <a href="refrigerator.html">Refrigerator</a>
+                <a href="dl.html">Real-world environments</a>
+                <a href="quiz.html" class="active">Quiz</a>
+                <a href="refs.html">References</a>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main class="container">
+<br>
+
+    <section>
+        <h1>Quiz</h1>
+        <audio controls preload="metadata" style="width:100%">
+            <source src="assets/quiz.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+        </audio>
+    </section>
+    <section id="quiz">
+        <p>There are just a few short questions—nice and easy. Click Submit to see your score. You can retake the quiz anytime.</p>
+
+        <!-- Q1 -->
+        <div class="card">
+            <p><strong>Q1.</strong> How many classes are in the FRUVEG67 dataset?</p>
+            <div class="quiz" data-answer="b" data-explain="FRUVEG67 contains 67 fruit/vegetable classes captured in unconstrained scenes.">
+                <div class="option" data-key="a">80</div>
+                <div class="option" data-key="b">67</div>
+                <div class="option" data-key="c">32</div>
+                <div class="option" data-key="d">131</div>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="card">
+            <p><strong>Q2.</strong> What best describes the dataset size and labeling strategy?</p>
+            <div class="quiz" data-answer="a" data-explain="The dataset has 5,000 images; ~2,000 are manually labeled, and the rest are annotated by a semi-supervised data annotation (SSDA) process.">
+                <div class="option" data-key="a">5,000 images; ~2,000 manual labels; remaining via SSDA</div>
+                <div class="option" data-key="b">50,000 images; all manually labeled</div>
+                <div class="option" data-key="c">5,000 images; only synthetic labels</div>
+                <div class="option" data-key="d">2,000 images; all auto-labeled</div>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="card">
+            <p><strong>Q3.</strong> Which statement best describes FVDNet?</p>
+            <div class="quiz" data-answer="c" data-explain="FVDNet ensembles three YOLOv8n models with grid sizes 32/16/8; it averages bounding boxes and uses voting for class predictions.">
+                <div class="option" data-key="a">A single YOLOv8n with default grid size only</div>
+                <div class="option" data-key="b">A two-stage Faster R-CNN variant</div>
+                <div class="option" data-key="c">An ensemble of three YOLOv8n models (grids 32/16/8) with bbox averaging and class voting</div>
+                <div class="option" data-key="d">A pure transformer detector trained from scratch</div>
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="card">
+            <p><strong>Q4.</strong> What loss is used in the final objective for better small-object localization?</p>
+            <div class="quiz" data-answer="b" data-explain="The method combines focal loss with Jensen–Shannon Divergence (JSD) to improve localization, especially on small objects.">
+                <div class="option" data-key="a">IoU loss only</div>
+                <div class="option" data-key="b">Focal loss + Jensen–Shannon Divergence (JSD)</div>
+                <div class="option" data-key="c">Hinge loss only</div>
+                <div class="option" data-key="d">MSE on raw coordinates only</div>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="card">
+            <p><strong>Q5.</strong> What overall mean Average Precision (mAP) does FVDNet report on FRUVEG67?</p>
+            <div class="quiz" data-answer="b" data-explain="The paper reports an overall mAP of 0.82 across all 67 classes.">
+                <div class="option" data-key="a">0.52</div>
+                <div class="option" data-key="b">0.82</div>
+                <div class="option" data-key="c">0.72</div>
+                <div class="option" data-key="d">0.94</div>
+            </div>
+        </div>
+
+        <p id="quiz-result" class="small"></p>
+    </section>
+
+    <div class="quiz-actions">
+        <button id="quiz-submit" class="btn" type="button">Submit answers</button>
+        <button id="quiz-reset" class="btn" type="button" style="background:#64748b">Reset</button>
+    </div>
+    <p id="quiz-summary" class="small"></p>
+    <div id="quiz-breakdown" class="small"></div>
+
+</main>
+
+<footer>
+    <div class="container small">
+        © 2025 Food Identification · Online Tutorial. All rights reserved.
+    </div>
+</footer>
+
+<script>
+    // Highlight current nav link
+    document.addEventListener('DOMContentLoaded', function () {
+        let file = location.pathname.split('/').pop() || 'index.html';
+        file = file.split('?')[0].split('#')[0];
+        document.querySelectorAll('nav .links a').forEach(a => {
+            if (a.getAttribute('href') === file) a.classList.add('active');
+        });
+    });
+
+    // ===== Quiz selection (no grading until submit) =====
+    document.querySelectorAll('.quiz').forEach(block => {
+        block.addEventListener('click', e => {
+            const opt = e.target.closest('.option');
+            if (!opt) return;
+            // 清除当前题的选中态
+            block.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+        });
+    });
+
+    // ===== Submit: compute accuracy, then mark questions =====
+    const submitBtn = document.getElementById('quiz-submit');
+    const resetBtn  = document.getElementById('quiz-reset');
+    const summaryEl = document.getElementById('quiz-summary');
+    const detailEl  = document.getElementById('quiz-breakdown');
+
+    function gradeQuiz() {
+        const quizzes = Array.from(document.querySelectorAll('.quiz'));
+        let correct = 0;
+
+        detailEl.innerHTML = ''; // 清空上次明细
+
+        quizzes.forEach((q, idx) => {
+            const ans = (q.dataset.answer || '').trim();
+            const selected = q.querySelector('.option.selected');
+
+            // 先清掉旧标记
+            q.querySelectorAll('.option').forEach(o => o.classList.remove('correct','wrong'));
+
+            // 标注正确选项
+            const correctOpt = q.querySelector(`.option[data-key="${ans}"]`);
+            if (correctOpt) correctOpt.classList.add('correct');
+
+            let isRight = false;
+            if (selected) {
+                if (selected.dataset.key === ans) {
+                    isRight = true;
+                } else {
+                    selected.classList.add('wrong');
+                }
+            } else {
+                // 未作答按错题处理
+            }
+            if (isRight) correct++;
+
+            const exp = q.dataset.explain ? ' · ' + q.dataset.explain : '';
+            const row = document.createElement('div');
+            row.innerHTML = `<strong>Q${idx+1}</strong>: ` +
+                (isRight ? `<span class="ok">Correct</span>` : `<span class="bad">Wrong</span>`) + exp;
+            detailEl.appendChild(row);
+
+            // 提交后锁定交互（可选）
+            q.style.pointerEvents = 'none';
+        });
+
+        const total = quizzes.length;
+        const pct = Math.round((correct / total) * 100);
+        summaryEl.textContent = `Score: ${correct}/${total} (${pct}%)`;
+        summaryEl.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+
+    function resetQuiz() {
+        summaryEl.textContent = '';
+        detailEl.innerHTML = '';
+        document.querySelectorAll('.quiz').forEach(q => {
+            q.querySelectorAll('.option').forEach(o => o.classList.remove('selected','correct','wrong'));
+            q.style.pointerEvents = 'auto';
+        });
+    }
+
+    submitBtn?.addEventListener('click', gradeQuiz);
+    resetBtn?.addEventListener('click', resetQuiz);
+
+
+</script>
+
+</body>
+</html>
