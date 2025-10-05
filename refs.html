@@ -6,24 +6,21 @@
     <title>References · Food Identification · Online Tutorial</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <style>
-        /* Lightweight refinements for this page only */
+        /* Clean list; hide leading 1. 2. 3... numbers */
         main section { padding-top: 28px; }
-        .ref-list { counter-reset: ref; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
-        .ref-item { background: var(--surface); border: 1px solid var(--edge); border-radius: 14px; padding: 14px; box-shadow: 0 2px 10px rgba(15,23,42,.04); }
-        .ref-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
-        .ref-num { font-weight: 800; color: var(--accent); }
-        .ref-title { font-weight: 700; }
-        .ref-meta { color: var(--muted); }
-        .ref-links a { color: var(--accent); text-decoration: underline dotted; margin-right: 10px; }
-        .anno { margin-top: 8px; padding: 10px; background: var(--soft); border: 1px solid var(--edge); border-radius: 10px; }
-        .anno strong { font-weight: 700; }
-        .pill-wrap { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; }
-        .pill { display: inline-block; padding: 4px 8px; border-radius: 999px; background: var(--soft); border: 1px solid var(--edge); color: var(--muted); font-size: 12px; }
-        .tip { font-size: 13px; color: var(--muted); margin-top: 10px; }
+        ol.ref-list { list-style: none; padding-left: 0; margin: 0; }
+        .ref-item { margin: 0 0 22px 0; }
+        .ref-head { font-size: 16px; line-height: 1.5; }
+        .ref-head .num { font-weight: 700; margin-right: 6px; }
+        .ref-head em { font-style: italic; }
+        .ref-link { margin: 6px 0 10px; }
+        .ref-link a { text-decoration: underline; word-break: break-all; }
+        .ref-body p { margin: 6px 0; line-height: 1.55; }
+        .ref-body strong { font-weight: 700; }
+        header nav .links a.active { font-weight: 600; text-decoration: underline; }
     </style>
 </head>
 <body class="page-quiz">
-
 <header>
     <div class="container">
         <nav>
@@ -44,6 +41,8 @@
 
     <section aria-labelledby="page-title">
         <h1 id="page-title">Annotated Bibliography</h1>
+        <br>
+
         <figure aria-label="Page audio introduction">
             <audio controls preload="metadata" style="width:100%">
                 <source src="assets/ref.mp3" type="audio/mpeg" />
@@ -53,109 +52,125 @@
     </section>
 
     <section id="refs" aria-labelledby="refs-title">
-        <h2 id="refs-title">References</h2>
+        <br>
+
 
         <ol class="ref-list">
 
+            <!-- [1] Dai 2024 -->
             <li id="r1" class="ref-item">
                 <div class="ref-head">
-                    <span class="ref-num">[1]</span>
-                    <span class="ref-title">Dai, X. Y. (2024). Robust deep-learning based refrigerator food recognition.</span>
-                    <span class="ref-meta"><em>Frontiers in Artificial Intelligence</em>, 7:1442948. https://doi.org/10.3389/frai.2024.1442948</span>
+                    <span class="num">[1]</span>
+                    Dai, X. Y. (2024). <em>Robust deep-learning based refrigerator food recognition.</em>
+                    <em>Frontiers in Artificial Intelligence</em>, 7, 1442948.
                 </div>
-                <div class="ref-links">
-                    <a href="https://doi.org/10.3389/frai.2024.1442948" target="_blank" rel="noopener noreferrer">DOI</a>
+                <div class="ref-link">
+                    <a href="https://doi.org/10.3389/frai.2024.1442948" target="_blank" rel="noopener">
+                        https://doi.org/10.3389/frai.2024.1442948
+                    </a>
                 </div>
-                <div class="anno">
-                    <p><strong>Synopsis:</strong> Proposes <em>BroadFPN-YOLACT</em> (YOLACT with an extra P2 feature level) plus a two-stage <em>Simu-Augmentation</em> pipeline (object- then scene-level) to improve recognition of small/occluded items at long distances in smart-fridge settings.</p>
-                    <p><strong>Reliability:</strong> Peer-reviewed journal article; clear experimental design and metrics.</p>
-                </div>
-                <div class="pill-wrap">
-                    <span class="pill">YOLACT</span><span class="pill">FPN (P2)</span><span class="pill">Simu-Aug</span><span class="pill">Smart fridge</span>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Introduces BroadFPN-YOLACT (adds P2 feature level) and a two-stage Simu-Aug pipeline to better detect small/occluded fridge items in realistic scenes.</p>
+                    <p><strong>Reliability:</strong> Peer-reviewed journal article with ablation studies; results are solid for fridge settings but generalization to other domains may need validation.</p>
                 </div>
             </li>
 
+            <!-- [2] Mezgec & Koroušić Seljak 2017 -->
             <li id="r2" class="ref-item">
                 <div class="ref-head">
-                    <span class="ref-num">[2]</span>
-                    <span class="ref-title">Mezgec, S., &amp; Koroušić Seljak, B. (2017). NutriNet: A deep learning food and drink image recognition system for dietary assessment.</span>
-                    <span class="ref-meta"><em>Nutrients</em>, 9(7), 657. https://doi.org/10.3390/nu9070657</span>
+                    <span class="num">[2]</span>
+                    Mezgec, S., &amp; Koroušić Seljak, B. (2017). <em>NutriNet: A deep learning food and drink image recognition system for dietary assessment.</em>
+                    <em>Nutrients</em>, 9(7), 657.
                 </div>
-                <div class="ref-links">
-                    <a href="https://doi.org/10.3390/nu9070657" target="_blank" rel="noopener noreferrer">DOI</a>
+                <div class="ref-link">
+                    <a href="https://doi.org/10.3390/nu9070657" target="_blank" rel="noopener">
+                        https://doi.org/10.3390/nu9070657
+                    </a>
                 </div>
-                <div class="anno">
-                    <p><strong>Synopsis:</strong> Early CNN-based food/drink classifier oriented to dietary monitoring and intake estimation.</p>
-                    <p><strong>Reliability:</strong> Peer-reviewed; widely cited in nutrition-AI intersections.</p>
-                </div>
-                <div class="pill-wrap">
-                    <span class="pill">Dietary assessment</span><span class="pill">CNN</span>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Early CNN pipeline tailored for diet logging that classifies common foods and beverages from in-the-wild photos.</p>
+                    <p><strong>Reliability:</strong> Peer-reviewed; clear methods and dataset description, though coverage may skew toward popular cuisines and presentations.</p>
                 </div>
             </li>
 
+            <!-- [3] Bolya et al. 2019 -->
             <li id="r3" class="ref-item">
                 <div class="ref-head">
-                    <span class="ref-num">[3]</span>
-                    <span class="ref-title">Bolya, D., Zhou, C., Xiao, F., &amp; Lee, Y. J. (2019). YOLACT: Real-Time Instance Segmentation.</span>
-                    <span class="ref-meta"><em>ICCV</em>, 9157–9166.</span>
+                    <span class="num">[3]</span>
+                    Bolya, D., Zhou, C., Xiao, F., &amp; Lee, Y. J. (2019). <em>YOLACT: Real-Time Instance Segmentation.</em> In <em>ICCV</em>, 9157–9166.
                 </div>
-                <div class="ref-links">
-                    <a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Bolya_YOLACT_Real-Time_Instance_Segmentation_ICCV_2019_paper.pdf"
-                       target="_blank" rel="noopener noreferrer">PDF (CVF OpenAccess)</a>
+                <div class="ref-link">
+                    <a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Bolya_YOLACT_Real-Time_Instance_Segmentation_ICCV_2019_paper.pdf" target="_blank" rel="noopener">
+                        https://openaccess.thecvf.com/content_ICCV_2019/papers/Bolya_YOLACT_Real-Time_Instance_Segmentation_ICCV_2019_paper.pdf
+                    </a>
                 </div>
-                <div class="anno">
-                    <p><strong>Synopsis:</strong> One-stage, real-time instance segmentation using prototype masks + learned coefficients; introduces Fast-NMS for speed.</p>
-                    <p><strong>Reliability:</strong> Top-tier CV venue; highly cited baseline used across many domains.</p>
-                </div>
-                <div class="pill-wrap">
-                    <span class="pill">One-stage</span><span class="pill">Instance segmentation</span><span class="pill">Fast-NMS</span>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Single-stage instance segmentation using global prototype masks + per-instance coefficients; adds Fast-NMS for high FPS.</p>
+                    <p><strong>Reliability:</strong> ICCV peer-reviewed with public code; widely reproduced, though boundaries on tiny objects are less precise than two-stage methods.</p>
                 </div>
             </li>
 
+            <!-- [4] Khanna et al. 2024 -->
             <li id="r4" class="ref-item">
                 <div class="ref-head">
-                    <span class="ref-num">[4]</span>
-                    <span class="ref-title">Khanna, S., Chattopadhyay, C., &amp; Kundu, S. (2024). Enhancing Fruit and Vegetable Detection in Unconstrained Environment with a Novel Dataset.</span>
-                    <span class="ref-meta">arXiv:2409.13330.</span>
+                    <span class="num">[4]</span>
+                    Khanna, S., Chattopadhyay, C., &amp; Kundu, S. (2024).
+                    <em>Enhancing Fruit and Vegetable Detection in Unconstrained Environment with a Novel Dataset.</em> arXiv:2409.13330.
                 </div>
-                <div class="ref-links">
-                    <a href="https://arxiv.org/abs/2409.13330" target="_blank" rel="noopener noreferrer">Abstract</a>
-                    <a href="https://arxiv.org/pdf/2409.13330" target="_blank" rel="noopener noreferrer">PDF</a>
+                <div class="ref-link">
+                    <a href="https://arxiv.org/abs/2409.13330" target="_blank" rel="noopener">https://arxiv.org/abs/2409.13330</a>
+                    &nbsp;|&nbsp;
+                    <a href="https://arxiv.org/pdf/2409.13330" target="_blank" rel="noopener">https://arxiv.org/pdf/2409.13330</a>
                 </div>
-                <div class="anno">
-                    <p><strong>Synopsis:</strong> Introduces <em>FRUVEG67</em> (67 classes, ≈5k images) captured in unconstrained scenes; uses semi-supervised SSDA labeling and an ensemble detector (<em>FVDNet</em>, YOLOv7-based) with JSD + focal loss; evaluates at IoU 0.5/0.75/0.9.</p>
-                    <p><strong>Reliability:</strong> Preprint (not peer-reviewed yet) with detailed methodology and class-wise reporting.</p>
-                </div>
-                <div class="pill-wrap">
-                    <span class="pill">FRUVEG67</span><span class="pill">YOLOv7-based</span><span class="pill">SSDA</span><span class="pill">Unconstrained scenes</span>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Releases FRUVEG67 and trains a YOLOv7-based ensemble (FVDNet) with SSDA labeling; reports results at IoU 0.5/0.75/0.9.</p>
+                    <p><strong>Reliability:</strong> Preprint (not peer-reviewed); methods are detailed, but claims await independent benchmarking and dataset audits.</p>
                 </div>
             </li>
 
+            <!-- [5] Ángeles Cerón et al. 2021 -->
             <li id="r5" class="ref-item">
                 <div class="ref-head">
-                    <span class="ref-num">[5]</span>
-                    <span class="ref-title">Ángeles Cerón, J. C., Chang, L., Ochoa-Ruiz, G., &amp; Ali, S. (2021). Assessing YOLACT++ for real-time and robust instance segmentation of medical instruments in endoscopic procedures.</span>
-                    <span class="ref-meta">arXiv:2103.15997.</span>
+                    <span class="num">[5]</span>
+                    Ángeles Cerón, J. C., Chang, L., Ochoa-Ruiz, G., &amp; Ali, S. (2021).
+                    <em>Assessing YOLACT++ for real-time and robust instance segmentation of medical instruments in endoscopic procedures.</em> arXiv:2103.15997.
                 </div>
-                <div class="ref-links">
-                    <a href="https://arxiv.org/abs/2103.15997" target="_blank" rel="noopener noreferrer">Link</a>
+                <div class="ref-link">
+                    <a href="https://arxiv.org/abs/2103.15997" target="_blank" rel="noopener">
+                        https://arxiv.org/abs/2103.15997
+                    </a>
                 </div>
-                <div class="anno">
-                    <p><strong>Synopsis:</strong> Applies (and augments) YOLACT/YOLACT++ for surgical tool segmentation, maintaining real-time speeds (~37–45 FPS) with robust masks.</p>
-                    <p><strong>Reliability:</strong> Preprint; subsequent conference versions reported (e.g., EMBC).</p>
-                </div>
-                <div class="pill-wrap">
-                    <span class="pill">YOLACT++</span><span class="pill">Medical vision</span><span class="pill">Real-time</span>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Adapts YOLACT/YOLACT++ for endoscopic tool masks with near real-time throughput and robustness to specularities and blur.</p>
+                    <p><strong>Reliability:</strong> Preprint with follow-up mentions; evaluations are promising but limited to specific datasets and clinical contexts.</p>
                 </div>
             </li>
+
+            <!-- [6] Jain et al. 2022 -->
+            <li id="r6" class="ref-item">
+                <div class="ref-head">
+                    <span class="num">[6]</span>
+                    Jain, P., Chawla, P., Masud, M., Mahajan, S., &amp; Pandit, A. K. (2022).
+                    <em>Automated Identification Algorithm Using CNN for Computer Vision in Smart Refrigerators.</em>
+                    <em>Computers, Materials &amp; Continua</em>, 71(2), 3337–3353.
+                    <strong>DOI:</strong> <a href="https://doi.org/10.32604/cmc.2022.023053" target="_blank" rel="noopener">
+                    https://doi.org/10.32604/cmc.2022.023053
+                </a>
+                </div>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Proposes a CNN-based computer vision algorithm for smart refrigerators, integrating <em>InceptionV3</em> and <em>MobileNetV3</em> architectures for automated food identification and weight-based recognition.
+                        The system transmits real-time food name, quantity, and weight data to a <em>cloud server (Google Firebase)</em>, accessible through the <em>“Fridge Assistant”</em> Android app. The module uses an external camera and load cell to monitor food items continuously and accurately.</p>
+
+                    <p><strong>Results:</strong> Achieved up to <strong>99.9%</strong> accuracy with <em>MobileNetV3</em> on the FRUITS360 dataset, outperforming prior models like <em>InceptionV3</em> and <em>ResNet-50</em>. Real-time tests with an RPi-based camera module validated the approach for fruit and vegetable classification.</p>
+
+                    <p><strong>Reliability:</strong> Peer-reviewed journal article published in <em>Computers, Materials &amp; Continua</em> by Tech Science Press; includes detailed architecture diagrams, dataset analysis, and real-time experimental validation.</p>
+                </div>
+            </li>
+
 
         </ol>
 
-        <p class="tip">
-            Tip: In the main text, cite with hyperlink numbers (e.g., <a class="ref" href="#r1">[1]</a>), and include the source and license in figure captions. For external media (images/video/audio), ensure copyright compliance.
-        </p>
     </section>
-
 </main>
 
 <footer>
@@ -174,6 +189,5 @@
         });
     });
 </script>
-
 </body>
 </html>
