@@ -3,24 +3,178 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Food Identification · Real‑world Environments</title>
+    <title>Food Identification · Real-world Environments</title>
     <link rel="stylesheet" href="assets/css/styles.css" />
     <style>
-        /* Page-specific tweaks */
-        main section { border-bottom: none; padding: 44px 0; }
-        h1 { margin: .25rem 0 1rem; }
-        .grid { display:grid; gap: 1rem; }
-        .cols-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-        .muted { color: var(--muted); }
-        .badge { display:inline-block; padding:4px 10px; border:1px solid var(--edge); border-radius:999px; background:var(--soft); font-size:12px; color:var(--muted); }
-        figure { margin:0; }
-        .figcap { font-size:.85rem; color:var(--muted); margin-top:.35rem; }
-        .note { font-size:.92rem; color:#475569; background:#f8fafc; border:1px solid var(--edge); border-radius:12px; padding:10px 12px; }
-        .kpis { display:flex; gap:8px; flex-wrap:wrap; }
-        .kpis .pill { background:#eef7ff; border:1px solid var(--edge); color:#1e3a8a; }
+        :root{
+            --container: 1400px;
+            --toc-w: 260px;
+            --gap: 48px;
+            --sticky-top: 86px;
+            --content-ch: clamp(78ch, 58vw, 96ch);
+            --gutter-left: 80px;
+            --radius: 12px;
+
+
+        }
+
+
+
+        /* Offset in-page anchors for sticky header */
+        [id]{ scroll-margin-top: calc(var(--sticky-top) + 12px); }
+
+        main.container{
+            max-width: var(--container);
+            margin-inline: auto;
+            padding-left: calc(20px + var(--gutter-left));
+            padding-right: 20px;
+        }
+
+
+
+        .page-grid{
+            display: grid;
+            grid-template-columns: var(--toc-w) minmax(0,1fr);
+            gap: var(--gap);
+            align-items: start;
+        }
+        .lesson{ max-width: var(--content-ch); }
+
+        /* Desktop TOC */
+        .article-toc{
+            position: sticky; top: var(--sticky-top);
+            background: transparent; border: none;
+            padding: 0; height: fit-content;
+            font-size: 1.08rem; line-height: 1.65;
+            margin-top: 0; /* will be set dynamically for alignment */
+        }
+        .article-toc .toc-title{ font-weight: 700; color:#0f172a; margin: 0 0 10px; font-size: 1.2rem; }
+        .toc-list{ list-style: none; padding: 0; margin: 0; }
+        .toc-list li{ margin: 8px 0; }
+        .toc-list a{ display:block; padding:10px; min-height:40px; text-decoration:none; color:#334155; border-radius:10px; }
+        .toc-list a:hover{ background:#f1f5f9; }
+        .toc-list a.active{ background:#eef7ff; color:#1d4ed8; }
+        .idx{ display:inline-block; width:2.2em; color:#64748b; }
+
+        /* Typography */
+        .lesson h1{
+            text-align:center; width:100%;
+            font-size: clamp(1.8rem, 1.3rem + 1.5vw, 2.4rem);
+            margin: .4rem 0 1.8rem;
+        }
+        .lesson h2{ font-size: clamp(1.25rem, 1.1rem + .6vw, 1.7rem); margin: 0 0 .6rem; }
+        .lesson h3{ font-size: clamp(1.02rem, .95rem + .25vw, 1.15rem); margin: 1rem 0 .4rem; }
+        .lesson p{ margin: .5rem 0; }
+        .lesson ul{ margin: .4rem 0 .95rem 1.25rem; }
+        .lesson audio{ display:block; width:100%; margin: .8rem auto 2.8rem; }
+
+        .lesson .img, .lesson img.img{
+            max-width:100%; height:auto; display:block;
+            border:none; outline:none; box-shadow:none; background:none; border-radius:12px;
+        }
+
+
+        .lesson .legend{ font-size:.86rem; color:#64748b; margin:.35rem 0 .6rem; }
+        /* 让同一行的网格子项等高 */
+        .lesson .grid.cols-2{ align-items: stretch; }   /* 覆盖 start */
+
+        /* 让子元素占满分配到的网格高度 */
+        .lesson .grid.cols-2 > *{ height: 100%; }
+
+        /* 可选：卡片内容采用列布局，说明文字贴底更整齐 */
+        .lesson .grid.cols-2 .card{ display:flex; flex-direction:column; }
+        .lesson .grid.cols-2 .figcap,
+        .lesson .grid.cols-2 .legend{ margin-top:auto; }
+
+
+
+
+        /* Mobile TOC (collapsible) */
+        .toc-mobile{ display:none; }
+
+        @media (max-width: 1200px){
+            :root{ --gutter-left: 40px; }
+            main.container{ max-width: 1040px; }
+        }
+        @media (max-width: 1024px){
+            :root{ --gutter-left: 0px; --sticky-top: 74px; }
+            .page-grid{ grid-template-columns: 1fr; }
+            .article-toc{ display:none; }
+            .toc-mobile{
+                display:block; position: sticky; top: var(--sticky-top); z-index:5;
+                background:#fff; border:1px solid #e6eaf2; border-radius: var(--radius);
+                padding:.25rem .5rem; margin:.25rem 0 .8rem;
+                box-shadow: 0 6px 16px rgba(15,23,42,.05);
+            }
+            .toc-mobile summary{
+                cursor:pointer; font-weight:800; color:#0f172a;
+                padding:.65rem .8rem .65rem 2.2rem;
+                border-radius:10px; background:#f8fafc; list-style: none;
+                position: relative; user-select:none;
+            }
+            .toc-mobile summary::before{
+                content:""; position:absolute; left:.85rem; top:50%;
+                transform: translateY(-50%) rotate(0deg);
+                width:0; height:0;
+                border-left:7px solid currentColor;
+                border-top:5px solid transparent;
+                border-bottom:5px solid transparent;
+                opacity:.9; transition: transform .18s ease;
+            }
+            .toc-mobile[open] summary{ background:#eef7ff; }
+            .toc-mobile[open] summary::before{ transform: translateY(-50%) rotate(90deg); }
+
+            .toc-mobile ol{ margin:.4rem 0 .4rem; padding:.25rem 0 .5rem; list-style:none; }
+            .toc-mobile a{
+                display:block; padding:.55rem .8rem; text-decoration:none; color:#334155;
+                border-radius:10px; font-weight:600;
+            }
+            .toc-mobile a:hover{ background:#f1f5f9; }
+            .toc-mobile a.active{ color:#1d4ed8; background:#eef7ff; }
+            .lesson .grid.cols-2{ grid-template-columns: 1fr; }
+            main.container{ padding-left:16px; padding-right:16px; }
+        }
+        @media (min-width:1600px){ main.container{ max-width:1600px; } }
+
+
+
+
+        /* Sensor 卡片的浅蓝渐变背景（提高优先级，避免被其它规则覆盖） */
+        .ai-sensor-box{
+            background: linear-gradient(180deg, #f8fbff 0%, #ffffff 100%) !important;
+            border: 1px solid #e6eaf2;
+            border-left: 4px solid #2563eb;
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.08);
+            margin-top: 0.8rem;
+        }
+
+        .ai-sensor-box p{ font-size:1.05rem; line-height:1.65; margin:0 0 1rem; }
+        .ai-sensor-box h3{ margin-top:.8rem; font-size:1.1rem; }
+        .ai-sensor-box ul{ margin-top:.5rem; padding-left:1.2rem; }
+        .ai-sensor-box li{ margin-bottom:.6rem; }
+
+
+
+        @keyframes sensorGlowShift{
+            0%{background-position: 0% 50%}
+            100%{background-position: 100% 50%}
+        }
+        /* 悬停动效（需要选择器，内联无法写 :hover） */
+        #sensorCard:hover{
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 10px 28px rgba(15,23,42,.18);
+        }
+
+
+
+
+
+
     </style>
 </head>
-<body class="page-quiz">
+<body>
 <header>
     <div class="container">
         <nav>
@@ -28,189 +182,466 @@
             <div class="links">
                 <a href="index.html">Home</a>
                 <a href="refrigerator.html">Refrigerator</a>
-                <a href="dl.html" class="active">Real‑world environments</a>
+                <a href="dl.html" class="active">Real-world Environments</a>
                 <a href="quiz.html">Quiz</a>
                 <a href="refs.html">References</a>
             </div>
         </nav>
     </div>
 </header>
+
 <main class="container">
+
+    <!-- Mobile TOC -->
+    <details class="toc-mobile" aria-label="Table of Contents (Mobile)">
+        <summary>Table of Contents</summary>
+        <ol>
+            <li><a href="#bg">1. Background</a></li>
+            <li><a href="#sensor">2. Sensor</a></li>
+
+
+            <li><a href="#datasets">3. Datasets &amp; Models</a></li>
+            <li><a href="#examples">4. Examples</a></li>
+            <li><a href="#experimental">4. Experimental</a></li>
+            <li><a href="#results-fvdnet">5. Results: YOLO vs FVDNet</a></li>
+            <li><a href="#strengths">6. Strengths &amp; Applications</a></li>
+            <li><a href="#limits">7. Limitations / Future Work</a></li>
+        </ol>
+    </details>
+
+    <div class="page-grid">
+
+        <!-- Left TOC (desktop) -->
+        <aside class="article-toc" aria-label="Table of Contents">
+            <div class="toc-title">Table of Contents</div>
+            <ol class="toc-list">
+                <li><a href="#bg"><span class="idx">1.</span> Background</a></li>
+                <li><a href="#sensor"><span class="idx">2.</span> Sensor</a></li>
+
+
+                <li><a href="#datasets"><span class="idx">3.</span> Datasets &amp; Models</a></li>
+                <li><a href="#examples"><span class="idx">4.</span> Examples</a></li>
+                <li><a href="#experimental"><span class="idx">4.</span> Experimental</a></li>
+                <li><a href="#results-fvdnet"><span class="idx">5.</span> Results: YOLO vs FVDNet</a></li>
+                <li><a href="#strengths"><span class="idx">6.</span> Strengths &amp; Applications</a></li>
+                <li><a href="#limits"><span class="idx">7.</span> Limitations / Future Work</a></li>
+            </ol>
+        </aside>
+
+        <!-- Right content -->
+        <div>
+            <section class="lesson">
+                <h1>Food Identification in Real-world Environments</h1>
+                <audio controls preload="metadata">
+                    <source src="assets/real.mp3" type="audio/mpeg" />
+                    Your browser does not support the audio element.
+                </audio>
+
+                <!-- 1. Background -->
+                <section id="bg">
+                    <h2>1. Background</h2>
+                    <div class="grid cols-2">
+                        <div class="card">
+                            <p>Recognizing produce in <em>unconstrained</em> scenes—outdoor orchards, markets, kitchen countertops, even when the fridge door is opened—faces challenges such as <strong>illumination changes</strong>, <strong>occlusion</strong>, <strong>cluttered backgrounds</strong>, and wide variation in <strong>shape/size/color</strong>. Common backbones and detectors include ResNet, Inception, MobileNet, and YOLO families.</p>
+                            <div class="note">
+                                <strong>Core difficulties</strong>
+                                <ul>
+                                    <li><b>Small / distant objects</b> → reduced pixel detail.</li>
+                                    <li><b>Partially covered by occlusion</b> → incomplete visual cues.</li>
+                                    <li><b>Busy / cluttered backgrounds</b> → confusing context.</li>
+                                </ul>
+                                <p class="muted">Impact: insufficient feature-level spatial detail → hurts <em>recall</em>, <em>localization</em>, and <em>classification</em>.</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <img class="img" src="./assets/o.png" alt="Real-world produce scenes" loading="lazy" decoding="async">
+                            <div class="legend">ImageSource: AI-generated illustration.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <h2>2. Sensor</h2>
+                <br>
+
+                <!-- 2. AI Sensor -->
+
+                <section id="sensor" style="margin:0; padding:0; background:transparent !important;">
+
+                    <div id="sensorCard"
+                         style="
+        background: linear-gradient(135deg, #e0ecff 0%, #f7f9ff 100%) !important;
+        border: 1px solid #e6eaf2 !important;
+        border-left: 4px solid #3b82f6 !important;
+        border-radius: 12px !important;
+        padding: 16px 18px !important;
+        box-shadow: 0 6px 20px rgba(15,23,42,0.12) !important;
+        margin-top: .4rem !important;
+
+        /* 动画相关（始终缓慢流动） */
+        background-size: 200% 200%;
+        animation: sensorGlowShift 8s ease-in-out infinite;
+        /* 悬停过渡（在 :hover 里改变的属性需要 transition） */
+        transition: transform .25s ease, box-shadow .25s ease;
+       ">
+                        <p style="font-size:1.05rem; line-height:1.65; margin:0 0 1rem;">
+
+                            We propose an <strong>AI vision–based sensing module</strong> for recognizing produce in unconstrained scenes.
+                            By combining a <strong>standard RGB camera</strong> and real-time object detection models, the system can
+                            <strong>automatically recognize, track, and log fruits and vegetables</strong> across varied lighting, occlusion,
+                            and background conditions—without the need for labels or manual input.
+                        </p>
+
+                        <h3 style="margin:.8rem 0 0; font-size:1.1rem;">AI Vision Sensor Overview</h3>
+                        <ul style="margin:.5rem 0 0; padding-left:1.2rem;">
+                            <li style="margin-bottom:.6rem;">
+                                <strong>Unconstrained environments:</strong> Recognize produce in <em>real-world scenes</em> such as outdoor orchards,
+                                markets, kitchen countertops, and open refrigerators, where challenges like
+                                <strong>illumination change, occlusion, and background clutter</strong> occur.
+                            </li>
+                            <li style="margin-bottom:.6rem;">
+                                <strong>RGB image format:</strong> The system operates using <strong>standard RGB images</strong> that capture natural color,
+                                shape, and texture cues. This format aligns with <strong>common cameras and smartphones</strong>.
+                            </li>
+                            <li style="margin-bottom:.6rem;">
+                                <strong>Smartphone-compatible acquisition:</strong> Datasets can be <strong>captured using mobile phone cameras</strong>,
+                                offering a low-cost, reproducible way to gather training/testing samples.
+                            </li>
+                            <li style="margin-bottom:.6rem;">
+                                <strong>Integration with deep learning:</strong> RGB frames are processed using <strong>modern vision detectors</strong>—including
+                                YOLOv8, YOLO-NAS, ResNet, Inception, and MobileNet—to handle <em>small objects, occlusion, and cluttered backgrounds</em>.
+                            </li>
+                            <li style="margin-bottom:.6rem;">
+                                <strong>Outcome:</strong> A <em>flexible RGB sensing platform</em> for static environments, improving
+                                <strong>recall, localization, and classification</strong>.
+                            </li>
+                        </ul>
+                        <div style="text-align:center; margin:1rem 0;">
+                            <img src="./assets/phone.png"
+                                 alt="AI Vision"
+                                 style="max-width:95%; border-radius:12px; box-shadow:0 6px 18px rgba(15,23,42,0.08); transition:transform .3s ease;">
+                            <div style="font-size:.85rem; color:#64748b; margin-top:.4rem;">ImageSource: AI-generated illustration.</div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+
+
 <br>
-    <section>
-        <h1>Food Identification in Real‑world Environments</h1>
-        <audio controls preload="metadata" style="width:100%">
-            <source src="assets/real.mp3" type="audio/mpeg" />
-            Your browser does not support the audio element.
-        </audio>
-    </section>
+                <br>
+                <br>
 
-    <!-- 1. Background -->
-    <section id="bg">
-        <h2>1. Background</h2>
-        <div class="grid cols-2">
-            <div class="card">
-                <p>Recognizing produce in <em>unconstrained</em> scenes—outdoor orchards, markets, kitchen countertops, even when the fridge door is opened—faces challenges such as <strong>illumination changes</strong>, <strong>occlusion</strong>, <strong>cluttered backgrounds</strong>, and wide variation in <strong>shape/size/color</strong>. Common backbones and detectors include ResNet, Inception, MobileNet, and YOLO families.</p>
-                <div class="callout">
-                    <strong>Core difficulties</strong>
-                    <ul class="callout-list">
-                        <li><b>Small / distant objects</b> → reduced pixel detail.</li>
-                        <li><b>Partially covered by hands (occlusion)</b> → incomplete visual cues.</li>
-                        <li><b>Busy / cluttered backgrounds</b> → confusing context.</li>
-                    </ul>
-                    <p class="callout-impact">
-                        Impact: insufficient feature-level spatial detail → hurts <em>recall</em>, <em>localization</em>, and <em>classification</em>.
-                    </p>
+                <!-- 2. Datasets & Methods in the Wild -->
+                <!--<section id="datasets">
+                    <h2>3. Datasets and Models</h2>
+
+
+
+                    <div class="grid cols-2">
+                        <div id="fruveg67" class="card">
+                            <h2>Dataset</h2>
+                            <h3>FRUVEG67 (Unconstrained produce) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
+                            <p><strong>Dataset used in this study:</strong> <em>FRUVEG67</em> covers <b>67</b> fruit and vegetable categories with about <b>5,000 images</b>. The label space includes <b>35 vegetables</b> and <b>32 fruits</b>. Around <b>2,000</b> images are manually annotated; for the remaining images the authors adopt a <b>semi-supervised learning</b> pipeline (<b>SSDA</b>) that iteratively generates object annotations.</p>
+
+                                <ul style="margin:.4rem 0 .6rem 1.2rem; line-height:1.7;">
+                                    <li><strong>Scenes:</strong> markets, orchards, kitchen countertops, open refrigerators.</li>
+                                    <li><strong>Composition:</strong> 3,500 multi-object unconstrained images + 1,500 single-object images.</li>
+                                    <li><strong>Annotation:</strong> Manual (≈2k) + SSDA auto-labeling (confidence ≥ 0.5, 4 iterations).</li>
+                                    <li><strong>Preprocessing:</strong> Resize 640×640 px, normalization, Gaussian smoothing, histogram equalization.</li>
+                                    <li><strong>Split:</strong> 70 % train · 20 % test · 10 % validation.</li>
+                                </ul>
+
+                        </div>
+                        <div id="fvdnet" class="card">
+                            <h2>Model</h2>
+                            <h3>FVDNet (Fruit and Vegetable Detection Network) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
+
+                            <p><strong>Model proposed in this study:</strong> <em>FVDNet</em> is an ensemble-based object detection network designed for <b>fruit and vegetable recognition in unconstrained environments</b>. It extends the <b>YOLOv7</b> framework, incorporates a <b>semi-supervised data annotation</b> pipeline (SSDA), and introduces a <b>Jensen–Shannon Divergence (JSD)</b>-based loss to improve localization accuracy—especially for small or occluded items.</p>
+
+                            <ul style="margin:.4rem 0 .6rem 1.2rem; line-height:1.7;">
+                                <li><strong>Architecture:</strong> Built upon YOLOv7 backbone and neck (pre-trained on MS-COCO) with three grid sizes (32, 16, 8) for multi-scale detection.</li>
+                                <li><strong>Loss Function:</strong> Combines Focal Loss with Jensen–Shannon Divergence (JSD) to align predicted and ground-truth bounding-box distributions modeled as Gaussians.</li>
+                                <li><strong>Semi-Supervised Labeling (SSDA):</strong> Iteratively trains YOLOv7, auto-labels high-confidence (≥0.5) samples, and refines annotations across four rounds.</li>
+                                <li><strong>Backbones Tested:</strong> ResNet-152, DenseNet-169, and InceptionNet for comparative analysis.</li>
+                                <li><strong>Performance:</strong> Achieved <b>mean Average Precision (mAP)</b> of <b>0.78</b> on FRUVEG67, outperforming YOLOv5/6/7 on most categories.</li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+                </section>-->
+                <h2>3. Datasets and Models</h2>
+                <section id="datasets">
+
+                    <!-- Inline CSS: emoji bullets + layout -->
+                    <style>
+                        #datasets .grid.cols-2{ display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
+                        @media (max-width:1024px){ #datasets .grid.cols-2{ grid-template-columns:1fr; } }
+
+                        #datasets .card{ background:#fff; border:1px solid #e6eaf2; border-radius:12px; box-shadow:0 8px 24px rgba(15,23,42,.06); padding:16px 18px; }
+                        #datasets h2{ margin:.1rem 0 .2rem; font-size:1.15rem; }
+                        #datasets h3{ margin:.1rem 0 .5rem; font-size:1.05rem; color:#0f172a; }
+
+                        /* Emoji list */
+                        #datasets ul{ list-style:none; padding:0; margin:.4rem 0 .2rem 0; }
+                        #datasets li{ display:flex; gap:10px; align-items:flex-start; margin:.5rem 0; line-height:1.7; color:#0f172a; }
+                        #datasets .emj{
+                            flex:0 0 1.6em;              /* fixed width for alignment */
+                            display:inline-flex; align-items:center; justify-content:center;
+                            font-size:1.25rem;           /* emoji size */
+                            line-height:1; margin-top:.2rem;
+                            filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
+                        }
+                        /* subtle hover “motion” */
+                        #datasets li:hover .emj{ transform: translateY(-1px) scale(1.05); transition: transform .15s ease; }
+                        #datasets .muted{ color:#64748b; }
+                    </style>
+
+                    <div class="grid cols-2">
+                        <!-- Dataset Card -->
+                        <div id="fruveg67" class="card">
+                            <h2>Dataset:</h2>
+                            <h3>FRUVEG67 (Unconstrained produce) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
+                            <p><strong>Dataset used in this study:</strong> <em>FRUVEG67</em> covers <b>67</b> fruit and vegetable categories with about <b>5,000 images</b>. The label space includes <b>35 vegetables</b> and <b>32 fruits</b>. Around <b>2,000</b> images are manually annotated; for the remaining images the authors adopt a <b>semi-supervised learning</b> pipeline (<b>SSDA</b>) that iteratively generates object annotations.</p>
+
+                            <ul>
+                                <li><span class="emj" aria-hidden="true">🗺️</span><span><strong>Scenes:</strong> markets, orchards, kitchen countertops, open refrigerators.</span></li>
+                                <li><span class="emj" aria-hidden="true">🗂️</span><span><strong>Composition:</strong> 3,500 multi-object unconstrained images + 1,500 single-object images.</span></li>
+                                <li><span class="emj" aria-hidden="true">🏷️</span><span><strong>Annotation:</strong> Manual (≈2k) + SSDA auto-labeling (confidence ≥ 0.5, 4 iterations).</span></li>
+                                <li><span class="emj" aria-hidden="true">🧰</span><span><strong>Preprocessing:</strong> Resize 640×640 px, normalization, Gaussian smoothing, histogram equalization.</span></li>
+                                <li><span class="emj" aria-hidden="true">📐</span><span><strong>Split:</strong> 70% train · 20% test · 10% validation.</span></li>
+                            </ul>
+                            <p class="muted">Note: RGB images captured by commodity/smartphone cameras are sufficient.</p>
+                        </div>
+
+                        <!-- Model Card -->
+                        <div id="fvdnet" class="card">
+                            <h2>Model</h2>
+                            <h3>FVDNet (Fruit &amp; Vegetable Detection Network) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
+                            <p><strong>Model proposed in this study:</strong> <em>FVDNet</em> extends <b>YOLOv7</b>, integrates a <b>semi-supervised data annotation</b> loop, and adopts a <b>Jensen–Shannon Divergence (JSD)</b>–based loss to improve small/occluded object localization.</p>
+
+                            <ul>
+                                <li><span class="emj" aria-hidden="true">🤖</span><span><strong>Architecture:</strong> YOLOv7 backbone/neck (MS-COCO pretrain); multi-scale heads (P3/P4/P5 → strides 8/16/32).</span></li>
+                                <li><span class="emj" aria-hidden="true">🧪</span><span><strong>Loss:</strong> Focal Loss + JSD aligning predicted vs. GT Gaussian box distributions.</span></li>
+                                <li><span class="emj" aria-hidden="true">🔁</span><span><strong>SSDA:</strong> Train → auto-label (conf ≥ 0.5) → fine-tune, repeat for 4 rounds.</span></li>
+                                <li><span class="emj" aria-hidden="true">🧱</span><span><strong>Backbones tested:</strong> ResNet-152, DenseNet-169, InceptionNet.</span></li>
+                                <li><span class="emj" aria-hidden="true">📊</span><span><strong>Performance:</strong> mAP <b>0.78</b> on FRUVEG67; surpasses YOLOv5/6/7 on most classes.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+
+
+                <div class="card">
+                    <img class="img" src="./assets/p1.png" alt="FVDNet architecture" loading="lazy" decoding="async">
+                    <div class="legend">FVDNet training with three parallel processes (YOLOv8n variants). Source: <a href="refs.html#r4">[4]</a></div>
                 </div>
-            </div>
-            <div class="card">
-                <img class="img" src="./assets/o.png"
-                     alt="Fridge motivation illustration"
-                     loading="lazy" decoding="async">
-                <div class="legend">ImageSource: AI-generated illustration.</div>
-            </div>
+
+                <!-- 3. Examples -->
+                <section id="examples">
+                    <h2>4. Examples</h2>
+                    <div class="grid cols-2">
+                        <figure class="card">
+                            <img class="img" src="assets/m.png" alt="Market scene detection example" />
+                            <figcaption class="figcap">Detection in a busy market with illumination/occlusion/clutter.</figcaption>
+                            <div class="legend">Image Source: AI-generated illustration.</div>
+                        </figure>
+                        <figure class="card">
+                            <img class="img" src="assets/wild.png" alt="Open-refrigerator example" />
+                            <figcaption class="figcap">A variety of fruits captured in their natural growing environments — including orchards, farms, and wild trees. .</figcaption>
+                            <div class="legend">Image Source:<a href="refs.html#r4">[4]</a></div>
+                        </figure>
+                    </div>
+                </section>
+
+                <!-- 4. Experimental -->
+                <section id="experimental">
+                    <h2>4. Experimental</h2>
+                    <p>We evaluate FVDNet on the FRUVEG67 dataset. The goal is to assess the effectiveness of the proposed detector by swapping alternative backbones within a set of state-of-the-art models. Specifically, we vary the backbone used to extract features for FVDNet (e.g., ResNet-152 and InceptionNet). Models are trained for 100 epochs on two NVIDIA A30 GPUs. The dataset is split 70%/20%/10% for train/test/validation. For comparisons with YOLO baselines, we report performance at IoU thresholds of 0.50, 0.75, and 0.90.</p>
+
+                    <img class="img" src="assets/YOLO.png" alt="YOLO results" />
+                    <figcaption class="figcap">Results on YOLO v7.</figcaption>
+                    <div class="legend">Image Source: <a href="refs.html#r1">[1]</a></div>
+
+                    <img class="img" src="assets/FVD.png" alt="FVDNet results" />
+                    <figcaption class="figcap">Results on FVDNet.</figcaption>
+                    <div class="legend">Image Source: <a href="refs.html#r4">[4]</a></div>
+                </section>
+
+                <!-- 5. Results -->
+                <section id="results-fvdnet" class="section-mm">
+                    <h2>5. Results: YOLO vs FVDNet</h2>
+
+                    <figure class="media-card is-table">
+                        <img class="media-img" src="./assets/t3.png"
+                             alt="Class-wise results on FRUVEG67: YOLOv5/YOLOv6/YOLOv7 vs FVDNet">
+                        <figcaption class="media-cap">
+                            Class-wise scores on FRUVEG67. Columns: Y5 (YOLOv5), Y6 (YOLOv6), Y7 (YOLOv7), and
+                            <strong>FVDNet</strong>. FVDNet leads on most categories, especially small/occluded items.
+                            Source: <a class="ref" href="refs.html#r4">[4]</a>
+                        </figcaption>
+                    </figure>
+
+                    <div class="card">
+                        <h3>Key Findings</h3>
+                        <ul class="mini">
+                            <li><strong>Overall:</strong> FVDNet outperforms YOLOv5/6/7 on most classes, improving both localization and detection.</li>
+                            <li><strong>Hard cases (small / occluded):</strong>
+                                Mushroom <em>(0.19 → <strong>0.44</strong>)</em>,
+                                Bitter gourd <em>(0.46 → <strong>0.63</strong>)</em>,
+                                Kiwifruit <em>(0.47 → <strong>0.63</strong>)</em>,
+                                Watermelon <em>(0.68 → <strong>0.78</strong>)</em>,
+                                Strawberries <em>(0.64 → <strong>0.74</strong>)</em>,
+                                Zucchini <em>(0.53 → <strong>0.65</strong>)</em>.
+                            </li>
+                            <li><strong>Common produce:</strong>
+                                Potato <em>(0.74 → <strong>0.89</strong>)</em>,
+                                Tomato <em>(0.81 → <strong>0.94</strong>)</em>,
+                                Grapes <em>(0.59 → <strong>0.69</strong>)</em>,
+                                Guava <em>(0.63 → <strong>0.70</strong>)</em>,
+                                Banana <em>(0.64 → <strong>0.67</strong>)</em>,
+                                Pear <em>(0.53 → <strong>0.61</strong>)</em>.
+                            </li>
+                            <li><strong>Low-signal classes:</strong> FVDNet still leads (e.g., Grapefruit <em>0.31 → <strong>0.42</strong></em>, Coriander <em>0.42 → <strong>0.44</strong></em>).</li>
+                            <li><strong>Exceptions:</strong> A few ties/slight deficits (e.g., Ivy gourd Y6 0.48 vs FVDNet 0.47), but rare.</li>
+                        </ul>
+                        <div class="bq"><strong>Takeaway:</strong> FVDNet improves robustness to distance, occlusion, and clutter—often yielding double-digit AP gains.</div>
+                    </div>
+                </section>
+
+                <!-- 6. Strengths & 7. Limits -->
+                <section id="strengths">
+                    <h2>6. Strengths &amp; Applications</h2>
+                    <ul>
+                        <li><strong>Household value:</strong> Automatic stock tracking, duplicate-purchase prevention, freshness alerts, shopping-list assistance.</li>
+                        <li><strong>Beyond the fridge:</strong> The pipeline generalizes to kitchens, markets, cafeterias.</li>
+                        <li><strong>Privacy-friendly option:</strong> All processing can stay local.</li>
+                    </ul>
+                </section>
+
+                <section id="limits">
+                    <h2>7. Limitations / Future Work</h2>
+                    <ul>
+                        <li><strong>Label quality &amp; domain shift:</strong> SSDA labels and changing scenes (lighting/glare/packaging) can reduce accuracy.</li>
+                        <li><strong>Edge constraints:</strong> Ensembles increase inference cost and power on small devices.</li>
+                        <li><strong>Long-tail classes:</strong> Rare/visually similar items need better calibration and disambiguation.</li>
+                        <li><strong>Active learning:</strong> Human-in-the-loop selection + SSDA refinement to cut labeling cost.</li>
+                    </ul>
+                </section>
+
+            </section>
         </div>
-    </section>
-
-    <!-- 2. Datasets & Methods in the Wild -->
-    <section id="datasets">
-        <h2>2. Datasets & Models in Real‑world Environments</h2>
-        <div class="grid cols-2">
-
-            <dev id="fruveg67" class="card">
-                <h4>FRUVEG67 (Unconstrained produce) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h4>
-
-                <p>
-                    <strong>Dataset used in this study:</strong> <em>FRUVEG67</em> covers <b>67</b> fruit and vegetable categories with about
-                    <b>5,000 images</b>. The label space includes <b>35 vegetables</b> and <b>32 fruits</b>. Around <b>2,000</b> images are
-                    manually annotated; for the remaining images the authors adopt a <b>semi-supervised learning</b> pipeline
-                    (<b>SSDA</b>) that iteratively generates object annotations.
-                </p>
-
-                <ul class="mini">
-                    <li><b>Main challenges in the wild:</b> <em>occlusion</em> (e.g., hands/containers), <em>small object size</em> at distance,
-                        and <em>clutter/noise</em> in backgrounds.</li>
-                    <li><b>Three-pronged approach in the paper:</b> (1) dataset-specific <em>image preprocessing</em>;
-                        (2) a detector tailored for produce, <b>FVDNet</b>; (3) a <em>redefined loss</em> to better handle small/occluded targets.</li>
-                </ul>
-            </dev>
-
-
-            <div class="card">
-                <img
-                        class="img"
-                        src="./assets/p1.png"
-                        alt=""
-                        loading="lazy" decoding="async"
-                >
-                <div class="legend">
-                    An illustration on the proposed FVDNet model that consists of three parallel training processes, where YOLOv8n models are trained with distinct
-                    configurations. Image Source:
-                    <a href="refs.html#r4">[4]</a> </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 3. Examples -->
-    <section id="examples">
-        <h2>3. Examples</h2>
-        <div class="grid cols-2">
-            <figure class="card">
-                <img class="img" src="assets/m.png" alt="Market scene detection example" />
-                <figcaption class="figcap">Example: Detection in a busy market with illumination/occlusion/clutter.</figcaption>
-                <div class="legend">ImageSource: AI-generated illustration.</div>
-            </figure>
-            <figure class="card">
-                <img class="img" src="assets/f3.png" alt="Open-refrigerator example" />
-                <figcaption class="figcap">Example: Open‑category refrigerator image—multiple small items at distance.</figcaption>
-                <div class="legend">ImageSource: AI-generated illustration.</div>
-            </figure>
-        </div>
-    </section>
-
-        <h2>4.Experimental</h2>
-        <P>Experimental setup. We evaluate FVDNet on the FRUVEG67 dataset. The goal is to assess the effectiveness of the proposed detector by swapping alternative backbones within a set of state-of-the-art models. Specifically, we vary the backbone used to extract features for FVDNet (e.g., ResNet-152 (R-152) and InceptionNet (IN)). Models are trained for 100 epochs on two NVIDIA A30 GPUs. The dataset is split 70%/20%/10% for training/testing/validation. For comparison against three YOLO baselines, we report performance at IoU thresholds of 0.50, 0.75, and 0.90.</P>
-
-                <img class="img" src="assets/YOLO.png" alt="Market scene detection example" />
-                <figcaption class="figcap">Results on YOLO v7.</figcaption>
-                <div class="legend">ImageSource:<a href="refs.html#r1">[1]</a></div>
-
-                <img class="img" src="assets/FVD.png" alt="Open-refrigerator example" />
-                <figcaption class="figcap">Results on FVDNet.</figcaption>
-                <div class="legend">Image Source: <a href="refs.html#r4">[4]</a></div>
-
-    <section id="results-fvdnet" class="lesson section-mm">
-        <h2>5. Results: YOLO vs FVDNet</h2>
-
-        <!-- 1) Full-width figure on top -->
-        <figure class="media-card is-table">
-                <img class="media-img" src="./assets/t3.png"
-                     alt="Class-wise results on FRUVEG67: YOLOv5/YOLOv6/YOLOv7 vs FVDNet">
-            <figcaption class="media-cap">
-                Class-wise scores on FRUVEG67. Columns: Y5 (YOLOv5), Y6 (YOLOv6), Y7 (YOLOv7), and
-                <strong>FVDNet</strong>. FVDNet leads on most categories, especially small/occluded items. Image Source:
-                <a class="ref" href="refs.html#r4">[4]</a>
-            </figcaption>
-        </figure>
-
-        <!-- 2) Explanatory text below the image -->
-        <div class="card">
-            <h3>Key Findings</h3>
-            <ul class="mini">
-                <li><strong>Overall:</strong> FVDNet outperforms YOLOv5/6/7 on most classes, improving both localization and detection.</li>
-                <li><strong>Hard cases (small / occluded):</strong>
-                    Mushroom <em>(0.19 → <strong>0.44</strong>)</em>,
-                    Bitter gourd <em>(0.46 → <strong>0.63</strong>)</em>,
-                    Kiwifruit <em>(0.47 → <strong>0.63</strong>)</em>,
-                    Watermelon <em>(0.68 → <strong>0.78</strong>)</em>,
-                    Strawberries <em>(0.64 → <strong>0.74</strong>)</em>,
-                    Zucchini <em>(0.53 → <strong>0.65</strong>)</em>.
-                </li>
-                <li><strong>Common produce:</strong>
-                    Potato <em>(0.74 → <strong>0.89</strong>)</em>,
-                    Tomato <em>(0.81 → <strong>0.94</strong>)</em>,
-                    Grapes <em>(0.59 → <strong>0.69</strong>)</em>,
-                    Guava <em>(0.63 → <strong>0.70</strong>)</em>,
-                    Banana <em>(0.64 → <strong>0.67</strong>)</em>,
-                    Pear <em>(0.53 → <strong>0.61</strong>)</em>.
-                </li>
-                <li><strong>Low-signal classes:</strong> FVDNet still leads (e.g., Grapefruit <em>0.31 → <strong>0.42</strong></em>, Coriander <em>0.42 → <strong>0.44</strong></em>).</li>
-                <li><strong>Exceptions:</strong> A few ties/slight deficits (e.g., Ivy gourd Y6 0.48 vs FVDNet 0.47), but rare.</li>
-            </ul>
-
-            <div class="bq">
-                <strong>Takeaway:</strong> FVDNet adds strong resilience to distance, occlusion, and clutter—yielding double-digit AP gains on many classes.
-            </div>
-        </div>
-    </section>
-
-
-    <section id="strengths">
-        <h2>4. Strengths &amp; Applications</h2>
-        <ul>
-            <li><strong>Household value:</strong> Automatic stock tracking, duplicate-purchase prevention, freshness alerts, and shopping-list assistance.</li>
-            <li><strong>Beyond the fridge:</strong> The pipeline generalizes to kitchens, markets, and cafeterias.</li>
-            <li><strong>Privacy-friendly option:</strong> All processing can stay local.</li>
-        </ul>
-    </section>
-
-    <section id="limits">
-        <h2>5. Limitations / Future Work</h2>
-        <ul>
-            <li><strong>Label quality &amp; domain shift:</strong> SSDA labels and changing scenes (lighting/glare/packaging) can reduce accuracy over time.</li>
-            <li><strong>Edge constraints:</strong> Multi-model ensembles increase inference cost and power on small devices.</li>
-            <li><strong>Long-tail classes:</strong> Rare/visually similar items need better calibration and disambiguation.</li>
-            <li><strong>Active learning:</strong> Human-in-the-loop selection + SSDA refinement to cut labeling cost.</li>
-        </ul>
-
-    </section>
-
-
+    </div>
 </main>
+
 <footer>
     <div class="container small">
         © 2025 Food Identification · Online Tutorial. All rights reserved.
     </div>
 </footer>
+
+<script>
+    // Highlight active nav link based on file name
+    (function() {
+        let file = location.pathname.split('/').pop() || 'index.html';
+        file = file.split('?')[0].split('#')[0];
+        document.querySelectorAll('nav .links a').forEach(a => {
+            if (a.getAttribute('href') === file) a.classList.add('active');
+        });
+    })();
+
+    // -------- ONLY CHANGE: Align desktop TOC top with the "1. Background" H2 --------
+    (function alignTOCInit(){
+        const pageGrid = document.querySelector('.page-grid');
+        const aside = document.querySelector('.article-toc');
+        const firstH2 = document.querySelector('#bg h2');
+        if (!pageGrid || !aside || !firstH2) return;
+
+        function alignTOC(){
+            // Compute distance between page-grid top and the first H2 top
+            const gridTop = pageGrid.getBoundingClientRect().top + window.scrollY;
+            const h2Top = firstH2.getBoundingClientRect().top + window.scrollY;
+            const offset = Math.max(0, Math.round(h2Top - gridTop));
+            aside.style.marginTop = offset + 'px';
+        }
+
+        // Initial + on events that can shift layout
+        alignTOC();
+        window.addEventListener('load', alignTOC, {once:false});
+        window.addEventListener('resize', alignTOC);
+        window.addEventListener('orientationchange', alignTOC);
+
+        // Also observe the firstH2 and pageGrid for any size/position changes
+        if (window.ResizeObserver){
+            const ro = new ResizeObserver(alignTOC);
+            ro.observe(firstH2);
+            ro.observe(pageGrid);
+        }
+    })();
+    // -------------------------------------------------------------------------------
+
+    // Desktop: IO-based scroll highlight
+    (function() {
+        const tocLinks = document.querySelectorAll('.article-toc a');
+        const secs = ['#bg','#datasets','#sensor','#examples','#experimental','#results-fvdnet','#strengths','#limits']
+
+
+                .map(s => document.querySelector(s)).filter(Boolean);
+        if (!tocLinks.length || !secs.length) return;
+        const io = new IntersectionObserver(entries => {
+            const vis = entries.filter(e => e.isIntersecting)
+                .sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+            if (!vis) return;
+            const id = '#' + vis.target.id;
+            tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === id));
+        }, { rootMargin: '-40% 0px -55% 0px', threshold: [0, 0.25, 1] });
+        secs.forEach(s => io.observe(s));
+    })();
+
+    // Mobile: lock highlight on click + auto close + precise scroll offset
+    (function() {
+        const details = document.querySelector('.toc-mobile');
+        if (!details) return;
+        const links = Array.from(details.querySelectorAll('a'));
+        let locked = null;
+
+        function setActive(href){
+            links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === href));
+        }
+
+        function headerOffset(){
+            const cssVal = getComputedStyle(document.documentElement).getPropertyValue('--sticky-top').trim();
+            return (parseInt(cssVal, 10) || 0) + 10;
+        }
+
+        links.forEach(a => {
+            a.addEventListener('click', e => {
+                const href = a.getAttribute('href');
+                const target = document.querySelector(href);
+                if (!target) return;
+                e.preventDefault();
+                locked = href;
+                setActive(href);
+                details.open = false; // auto collapse after choose
+                const top = target.getBoundingClientRect().top + window.scrollY - headerOffset();
+                window.scrollTo({ top, behavior: 'smooth' });
+            });
+        });
+
+        // Keep the active state locked; do not auto-switch on scroll
+        window.addEventListener('load', () => {
+            if (location.hash && details.querySelector(`a[href="${CSS.escape(location.hash)}"]`)) {
+                locked = location.hash;
+                setActive(locked);
+            }
+        });
+    })();
+</script>
 </body>
 </html>
