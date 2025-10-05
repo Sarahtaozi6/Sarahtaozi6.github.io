@@ -3,1339 +3,191 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Refrigerator</title>
+    <title>References · Food Identification · Online Tutorial</title>
     <link rel="stylesheet" href="assets/css/styles.css">
     <style>
-        /* ===== Page-only variables (this page's sizing) ===== */
-        :root{
-            --container: 1400px;                 /* page max width (content only) */
-            --toc-w: 260px;                      /* left TOC column width */
-            --gap: 48px;                         /* gap between TOC and content */
-            --sticky-top: 86px;                  /* sticky offset (header height) */
-            --content-ch: clamp(78ch, 58vw, 96ch);
-            --gutter-left: 80px;                 /* extra left whitespace before TOC */
-            --radius: 12px;
-
-            --bg-box-h: 400px;
-            --media-h: 360px;                    /* unified media height for side-by-side images */
-
-            --top-img-h: 220px;     /* 上面两张小图高度 */
-            --bottom-img-h: 380px;  /* 下面大图高度 */
-
-
-            /* 卡片总高度：在 420px～560px 间，随视口宽度平滑变化 */
-            --card-h: clamp(420px, 46vw, 560px);
-            /* 正面图片高度：在 200px～320px 间，随视口宽度平滑变化 */
-            --img-h:  clamp(200px, 26vw, 320px);
-            /* 卡片圆角与内边距也随尺寸微调 */
-
-            --pad: clamp(16px, 1.3vw, 22px);
-
-
-
-        }
-
-
-
-        /* Make in-page anchor jumps account for sticky header */
-        [id] { scroll-margin-top: calc(var(--sticky-top) + 10px); }
-
-        /* Scope to main container so header .container isn't affected */
-        main.container{
-            max-width: var(--container);
-            margin-left: auto; margin-right: auto;
-            padding-left: calc(20px + var(--gutter-left));
-            padding-right: 20px;
-        }
-
-        /* ===== Layout: Left TOC / Right Content ===== */
-        .page-grid{
-            display: grid;
-            grid-template-columns: var(--toc-w) minmax(0,1fr);
-            gap: var(--gap);
-            align-items: start;
-        }
-        /* limit content line length for readability */
-        .lesson{ max-width: var(--content-ch); }
-
-        /* TOC */
-        .article-toc{
-            position: sticky; top: var(--sticky-top);
-            border: none; box-shadow: none; background: transparent;
-            border-radius: var(--radius); padding: 0; height: fit-content;
-            font-size: 1.08rem; line-height: 1.65;
-        }
-        .article-toc .toc-title{ font-weight: 800; color:#0f172a; margin: 0 0 10px; font-size: 1.2rem; }
-        .toc-list{ list-style: none; padding: 0; margin: 0; }
-        .toc-list li{ margin: 8px 0; }
-        .toc-list a{
-            display:block; padding:10px; min-height:40px;
-            text-decoration:none; color:#334155; border-radius:10px;
-        }
-        .toc-list a:hover{ background:#f1f5f9; }
-        .toc-list a.active{ background:#eef7ff; color:#1d4ed8; }
-        .idx{ display:inline-block; width:2.2em; color:#64748b; }
-
-        /* Mobile collapsible TOC */
-        .toc-mobile{ display:none; }
-
-        /* ===== Content typography (scoped to .lesson only) ===== */
-        .lesson h1{
-            text-align:center;
-            width:100%;
-            font-size: clamp(1.8rem, 1.3rem + 1.5vw, 2.4rem);
-            margin: .4rem 0 1.2rem;
-        }
-        .lesson h2{ font-size: clamp(1.25rem, 1.1rem + .6vw, 1.7rem); margin: 0 0 .6rem; }
-        .lesson h3{ font-size: clamp(1.02rem, .95rem + .25vw, 1.15rem); margin: 1rem 0 .4rem; }
-        .lesson p{ margin: .5rem 0; }
-        .lesson ul{ margin: .4rem 0 .95rem 1.25rem; }
-
-        /* Audio centered with comfortable spacing */
-        .lesson audio{ display:block; margin: .2rem auto 3.8rem; width:100%; } /* increased bottom gap */
-
-        /* Images inside lesson: no borders/shadows; keep aspect */
-        .lesson .img, .lesson img.img{
-            max-width:100%; height:auto; display:block;
-            border:none; outline:none; box-shadow:none; background:none;
-            border-radius:12px;
-        }
-        .lesson .legend{ font-size:.86rem; color:#64748b; margin:.35rem 0 .6rem; }
-
-        /* Two-column media blocks (scoped to lesson only) */
-        .lesson .grid.cols-2{ display:grid; grid-template-columns: 1fr 1fr; gap:22px; align-items:start; }
-
-        /* ===== Responsive ===== */
-        @media (max-width: 1200px){
-            :root{ --gutter-left: 40px; }
-            main.container{ max-width: 1040px; }
-        }
-        @media (max-width: 1024px){
-            :root{ --gutter-left: 0px; --sticky-top: 74px; }
-            .page-grid{ grid-template-columns: 1fr; }
-            .article-toc{ display:none; }
-            .toc-mobile{
-                display:block; position: sticky; top: var(--sticky-top); z-index:5;
-                background:#fff; border:none; border-radius: var(--radius);
-                padding:.25rem .5rem; margin:.25rem 0 .6rem;
-            }
-            .toc-mobile summary{
-                cursor:pointer; font-weight:700; color:#0f172a;
-                padding:.6rem .7rem; border-radius:10px; background:#f8fafc;
-            }
-            .toc-mobile[open] summary{ background:#eef7ff; }
-            .toc-mobile ol{ margin:.4rem 0 0; padding:.25rem 0; list-style:none; }
-            .toc-mobile a{ display:block; padding:.5rem .6rem; text-decoration:none; color:#334155; border-radius:10px; }
-            .toc-mobile a:hover{ background:#f1f5f9; }
-
-            /* one column content on mobile */
-            .lesson .grid.cols-2{ grid-template-columns: 1fr; }
-            main.container{ padding-left:16px; padding-right:16px; }
-        }
-
-        /* Wide-screen cap to keep centered layout */
-        @media (min-width:1600px){
-            main.container{ max-width:1600px; }
-        }
-
-        /* Fine-tuned breathing room for title, audio, and first section heading */
-        .lesson h1{
-            margin-bottom: 1.8rem !important;   /* more space below title */
-        }
-        .lesson audio{
-            margin-top: 0.8rem !important;      /* space above audio */
-            margin-bottom: 3.8rem !important;   /* MORE space below audio before first H2 */
-        }
-        .lesson h2{
-            margin-top: 0;                      /* no extra top margin */
-        }
-
-        /* desktop-specific equal heights & unified image height */
-        @media (min-width: 1025px){
-            /* Stretch both columns to equal height */
-            #background .grid.cols-2, #background1 .grid.cols-2{ align-items: stretch; }
-
-            /* Optional fixed box height for the first section text+image pair */
-            #background .grid.cols-2 > .card{
-                height: var(--bg-box-h);
-                min-height: var(--bg-box-h);
-                overflow: hidden;
-            }
-
-            /* Only media cards enforce the unified image height */
-            .lesson .grid.cols-2 > .card.media{
-                display:flex;
-                flex-direction:column;
-                justify-content:flex-start;
-            }
-            .lesson .grid.cols-2 > .card.media img.img{
-                width:100%;
-                height:var(--media-h);
-                object-fit:contain;
-                display:block;
-            }
-        }
-
-        .figure-3block{ margin: 1.2rem 0; }
-
-        .figure-3block .top-row{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            margin-bottom: 12px;
-        }
-
-        .figure-3block .bottom-row{ display:block; }
-
-        /* 卡片与图片（复用你页面的圆角风格） */
-        .figure-3block figure{ margin:0; display:flex; flex-direction:column; }
-        .figure-3block img{ width:100%; display:block; border-radius:12px; }
-        .figure-3block .legend{ font-size:.86rem; color:#64748b; margin:.35rem 0 .2rem; }
-
-        /* 桌面端：等高且不变形 */
-        @media (min-width: 1025px){
-            .figure-3block .top-row img{
-                height: var(--top-img-h);
-                object-fit: contain;
-            }
-            .figure-3block .bottom-row img{
-                height: var(--bottom-img-h);
-                object-fit: contain;
-            }
-        }
-
-        /* 移动端：自动单列并自适应高度 */
-        @media (max-width: 1024px){
-            .figure-3block .top-row{ grid-template-columns: 1fr; }
-            .figure-3block img{ height:auto; }
-        }
-
-
-        /* ===== 3D Flip Card Layout (auto height version) ===== */
-        .flip-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 22px;
-            margin-top: 1.2rem;
-        }
-
-        @media (max-width: 1000px) {
-            .flip-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-
-        /* 外层容器自动高度 */
-        .flip-card {
-            background: transparent;
-            perspective: 1000px;
-            height: var(--card-h);
-            min-height: 440px; /* 确保视觉平衡，可根据需要调节 */
-        }
-
-        .flip-inner {
-            position: relative;
-            height: 100%;
-            border-radius: var(--radius);
-            box-shadow: 0 8px 24px rgba(15,23,42,.08);
-            transition: transform .7s;
-            transform-style: preserve-3d;
-        }
-
-        /* hover 触发翻转 */
-        .flip-card:hover .flip-inner {
-            transform: rotateY(180deg);
-        }
-        /* 鼠标悬停时轻微放大图片增加动感 */
-        .flip-card:hover .flip-front img.flip-img {
-            transform: scale(1.03);
-        }
-
-
-        /* front & back 基础结构 */
-        .flip-front,
-        .flip-back {
-            position:absolute; inset:0;
-            padding: var(--pad);
-            border-radius: var(--radius);
-            background:#fff;
-            display:flex; flex-direction:column;
-            backface-visibility:hidden;
-        }
-
-        /* 正面：图片高度自适应，下面标题占余量 */
-        .flip-front{
-            justify-content:flex-start; align-items:stretch;
-        }
-        /* 正面样式 */
-        .flip-front img.flip-img {
-            width: 100%;
-            height: var(--img-h);               /* ✅ 原180px → 240px，更长视觉更饱满 */
-            object-fit: cover;           /* 裁剪保持比例 */
-            border-radius: calc(var(--radius) - 4px);
-            margin-bottom: clamp(8px, .8vw, 12px);
-            transition: transform 0.35s ease-in-out;
-        }
-
-        .flip-front h3 {
-            margin: 6px 0 0;
-            font-size: clamp(1.02rem, .9rem + .4vw, 1.2rem);
-            text-align:center;
-
-            font-weight: 600;
-            color: #0f172a;
-
-        }
-
-        /* 背面样式 */
-        .flip-back {
-            transform: rotateY(180deg);
-            text-align: left;
-            padding: 24px 26px;
-            overflow-y: auto; /* 文字多时可滚动 */
-            background: #ffffff;
-            line-height: clamp(1.5, 1.2 + .3vw, 1.7);
-        }
-
-        .flip-back > div{
-            overflow-y:auto;                /* 仅滚动文字容器 */
-        }
-
-        /* 背面内容容器：用以滚动且避免顶到底贴边 */
-        .flip-back .content{
-            padding-right: 4px;             /* 给滚动条留点空间 */
-            height: 100%;
-        }
-
-        /* 背面文字更易读 */
-        .flip-back h4 {
-            color: #2563eb;
-            margin: 0 0 .4rem;
-            font-size: clamp(1rem, .9rem + .3vw, 1.15rem);
-            font-weight: 700;
-        }
-
-        .flip-back p {
-            margin:.5rem 0;
-            font-size: clamp(.96rem, .9rem + .2vw, 1.05rem);
-            color:#1e293b;
-        }
-
-        .flip-back strong {
-            color: #0f172a;                   /* 粗体对比更强 */
-            font-weight: 600;
-        }
-
-        @media (hover:none){
-            .flip-card:active .flip-inner{ transform: rotateY(180deg); }
-        }
-
-        /* 移动端再稍微高一点，提升展示感 */
-        @media (max-width: 768px) {
-            .flip-front img.flip-img {
-                height: 200px;
-            }
-        }
-
-        .img-note {
-            font-size: 0.75rem;         /* 小字体 */
-            color: #6b7280;             /* 浅灰色，不抢眼 */
-            margin-top: auto;           /* 自动推到底部 */
-            text-align: center;
-            padding-top: 6px;
-            line-height: 1.2;
-        }
-
-        .info-box{
-            background:#f0f6ff;              /* 浅蓝底 */
-            border-left:4px solid #2563eb;   /* 左侧蓝条 */
-            border-radius:12px;
-            padding:20px 24px;
-            margin:1.2rem 0;
-            box-shadow:0 2px 6px rgba(15,23,42,.05);
-        }
-        .info-box p{
-            margin:.6rem 0;
-            line-height:1.7;
-            color:#1e293b;
-        }
-        .info-box strong{ color:#0f172a; }
-        .info-box em{ color:#334155; }
-
-        .gradient-box {
-            border-radius: 14px;
-            padding: 18px 24px;
-            margin: 1.2rem 0;
-            color: #1e293b;
-            line-height: 1.7;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05);
-            transition: all 0.4s ease;
-            background: linear-gradient(135deg, #e0ecff 0%, #f7f9ff 100%);
-            border-left: 4px solid #3b82f6;
-            background-size: 200% 200%;
-            animation: subtleGlow 8s ease-in-out infinite alternate;
-        }
-
-        /* 各种颜色渐变背景 */
-        .blue-box {
-            background: linear-gradient(135deg, #e0ecff 0%, #f7f9ff 100%);
-            border-left: 4px solid #3b82f6;
-        }
-
-
-        /* 鼠标悬停轻微放大和加深阴影 */
-        .gradient-box:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.12);
-        }
-
-        /* 动态渐变轻微呼吸效果 */
-        @keyframes subtleGlow {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-
-        /* 段落字体样式 */
-        .gradient-box p {
-            margin: 0;
-            font-size: 1rem;
-            color: #1e293b;
-        }
-
-
-
-        /* Card container */
-        .comp-card{
-            background:#fff;
-            border-radius:16px;
-            box-shadow:0 8px 28px rgba(15,23,42,.08);
-            padding:14px 14px 18px;
-            margin:14px 0;
-        }
-
-        /* Title */
-        .comp-title{
-            text-align:center;
-            margin:6px 0 12px;
-            font-size:clamp(1.15rem,1rem + .6vw,1.6rem);
-            color:#0f172a;
-        }
-
-        /* Table base */
-        .comp-table{
-            width:100%;
-            border-collapse:separate;
-            border-spacing:0;
-            font-size:clamp(.92rem,.86rem + .2vw,1rem);
-        }
-        .comp-table thead th,
-        .comp-table td{
-            padding:12px 12px;
-            text-align:left;
-            vertical-align:middle;
-            border-bottom:1px solid #e5e7eb;
-        }
-        .comp-table tbody tr:nth-child(odd){
-            background:#f9fafb;
-        }
-
-        /* Column header colors (like screenshot) */
-        .col-feature{ background:#eef2ff; color:#334155; font-weight:700; border-top-left-radius:10px; }
-        .col-bc{ background:#f97316; color:#fff; font-weight:700; }
-        .col-gvm{ background:#f59e0b; color:#fff; font-weight:700; }
-        .col-ai{ background:#10b981; color:#fff; font-weight:700; border-top-right-radius:10px; }
-
-        /* First column cells */
-        .comp-table tbody td:first-child{
-            font-weight:600; color:#334155;
-        }
-
-        /* Status dots (Yes/Partial/No) */
-        .dot{
-            display:inline-flex; align-items:center; gap:8px;
-            padding:6px 10px;
-            border-radius:999px;
-            font-weight:600;
-            white-space:nowrap;
-        }
-
-        /* pill colors + icons via pseudo-elements */
-        .dot::before{
-            content:"";
-            width:18px; height:18px; border-radius:50%;
-            display:inline-block;
-        }
-
-        /* success */
-        .dot.yes{
-            background:#ecfdf5; color:#065f46;
-        }
-        .dot.yes::before{
-            background:#10b981;
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg>') no-repeat center/14px;
-            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M9 16.2l-3.5-3.5-1.4 1.4L9 19 20.3 7.7l-1.4-1.4z"/></svg>') no-repeat center/14px;
-        }
-
-        /* partial / warn */
-        .dot.partial{
-            background:#fff7ed; color:#92400e;
-        }
-        .dot.partial::before{
-            background:#f59e0b;
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>') no-repeat center/14px;
-            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>') no-repeat center/14px;
-        }
-
-        /* weak (another warn tone) */
-        .dot.warn{
-            background:#fffbeb; color:#92400e;
-        }
-        .dot.warn::before{
-            background:#fbbf24;
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 9v4m0 4h.01M12 3a9 9 0 100 18 9 9 0 000-18z"/></svg>') no-repeat center/14px;
-            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M12 9v4m0 4h.01M12 3a9 9 0 100 18 9 9 0 000-18z"/></svg>') no-repeat center/14px;
-        }
-
-        /* negative */
-        .dot.no{
-            background:#fef2f2; color:#991b1b;
-        }
-        .dot.no::before{
-            background:#ef4444;
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"/></svg>') no-repeat center/14px;
-            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="white" d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7 2.9 18.3 9.2 12 2.9 5.7 4.3 4.3 10.6 10.6 16.9 4.3z"/></svg>') no-repeat center/14px;
-        }
-
-        /* neutral (用于 “Yes/Low” 但不需要绿/红语义时) */
-        .dot.neutral{
-            background:#eef2ff; color:#1e3a8a;
-        }
-        .dot.neutral::before{
-            background:#6366f1;
-            -webkit-mask:none; mask:none; border-radius:50%;
-        }
-
-        /* Responsive: 行标题固定最少宽度，表格可水平滑动 */
-        @media (max-width: 880px){
-            .comp-card{ padding:10px; }
-            .comp-table{ display:block; overflow-x:auto; }
-            .comp-table thead th, .comp-table td{ white-space:nowrap; }
-        }
-
-
-
-
-
-
-
-
+        /* Clean list; hide leading 1. 2. 3... numbers */
+        main section { padding-top: 28px; }
+        ol.ref-list { list-style: none; padding-left: 0; margin: 0; }
+        .ref-item { margin: 0 0 22px 0; }
+        .ref-head { font-size: 16px; line-height: 1.5; }
+        .ref-head .num { font-weight: 700; margin-right: 6px; }
+        .ref-head em { font-style: italic; }
+        .ref-link { margin: 6px 0 10px; }
+        .ref-link a { text-decoration: underline; word-break: break-all; }
+        .ref-body p { margin: 6px 0; line-height: 1.55; }
+        .ref-body strong { font-weight: 700; }
+        header nav .links a.active { font-weight: 600; text-decoration: underline; }
     </style>
 </head>
-<body>
-
+<body class="page-quiz">
 <header>
     <div class="container">
         <nav>
             <div class="brand">Food Identification · Online Tutorial</div>
-            <div class="links"><a href="index.html" class="">Home</a><a href="refrigerator.html" class="">Refrigerator</a><a href="dl.html" class="">Real-world Environments</a><a href="quiz.html" class="">Quiz</a><a href="refs.html" class="">References</a></div>
+            <div class="links">
+                <a href="index.html">Home</a>
+                <a href="refrigerator.html">Refrigerator</a>
+                <a href="dl.html">Real-world environments</a>
+                <a href="quiz.html">Quiz</a>
+                <a href="refs.html">References</a>
+            </div>
         </nav>
     </div>
 </header>
 
 <main class="container">
+    <br>
 
-    <!-- Mobile collapsible TOC -->
-    <details class="toc-mobile" aria-label="Table of Contents (Mobile)">
-        <summary>Table of Contents</summary>
-        <ol>
-            <li><a href="#bg1">1. Background</a></li>
-            <li><a href="#how-it-works">2. How it Works</a></li>
-            <li><a href="#ai-sensor">3. AI Sensor</a></li>
-            <li><a href="#method1">4. Datasets & Models</a></li>
-            <li><a href="#experiments">5. Experiments & Results</a></li>
-            <li><a href="#strengths">6. Strengths & Applications</a></li>
-            <li><a href="#limitations">7. Limitations / Future Work</a></li>
+    <section aria-labelledby="page-title">
+        <h1 id="page-title">Annotated Bibliography</h1>
+        <br>
+
+        <figure aria-label="Page audio introduction">
+            <audio controls preload="metadata" style="width:100%">
+                <source src="assets/ref.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+        </figure>
+    </section>
+
+    <section id="refs" aria-labelledby="refs-title">
+        <br>
+
+
+        <ol class="ref-list">
+
+            <!-- [1] Dai 2024 -->
+            <li id="r1" class="ref-item">
+                <div class="ref-head">
+                    <span class="num">[1]</span>
+                    Dai, X. Y. (2024). <em>Robust deep-learning based refrigerator food recognition.</em>
+                    <em>Frontiers in Artificial Intelligence</em>, 7, 1442948.
+                </div>
+                <div class="ref-link">
+                    <a href="https://doi.org/10.3389/frai.2024.1442948" target="_blank" rel="noopener">
+                        https://doi.org/10.3389/frai.2024.1442948
+                    </a>
+                </div>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Introduces BroadFPN-YOLACT (adds P2 feature level) and a two-stage Simu-Aug pipeline to better detect small/occluded fridge items in realistic scenes.</p>
+                    <p><strong>Reliability:</strong> Peer-reviewed journal article with ablation studies; results are solid for fridge settings but generalization to other domains may need validation.</p>
+                </div>
+            </li>
+
+            <!-- [2] Mezgec & Koroušić Seljak 2017 -->
+            <li id="r2" class="ref-item">
+                <div class="ref-head">
+                    <span class="num">[2]</span>
+                    Mezgec, S., &amp; Koroušić Seljak, B. (2017). <em>NutriNet: A deep learning food and drink image recognition system for dietary assessment.</em>
+                    <em>Nutrients</em>, 9(7), 657.
+                </div>
+                <div class="ref-link">
+                    <a href="https://doi.org/10.3390/nu9070657" target="_blank" rel="noopener">
+                        https://doi.org/10.3390/nu9070657
+                    </a>
+                </div>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Early CNN pipeline tailored for diet logging that classifies common foods and beverages from in-the-wild photos.</p>
+                    <p><strong>Reliability:</strong> Peer-reviewed; clear methods and dataset description, though coverage may skew toward popular cuisines and presentations.</p>
+                </div>
+            </li>
+
+            <!-- [3] Bolya et al. 2019 -->
+            <li id="r3" class="ref-item">
+                <div class="ref-head">
+                    <span class="num">[3]</span>
+                    Bolya, D., Zhou, C., Xiao, F., &amp; Lee, Y. J. (2019). <em>YOLACT: Real-Time Instance Segmentation.</em> In <em>ICCV</em>, 9157–9166.
+                </div>
+                <div class="ref-link">
+                    <a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Bolya_YOLACT_Real-Time_Instance_Segmentation_ICCV_2019_paper.pdf" target="_blank" rel="noopener">
+                        https://openaccess.thecvf.com/content_ICCV_2019/papers/Bolya_YOLACT_Real-Time_Instance_Segmentation_ICCV_2019_paper.pdf
+                    </a>
+                </div>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Single-stage instance segmentation using global prototype masks + per-instance coefficients; adds Fast-NMS for high FPS.</p>
+                    <p><strong>Reliability:</strong> ICCV peer-reviewed with public code; widely reproduced, though boundaries on tiny objects are less precise than two-stage methods.</p>
+                </div>
+            </li>
+
+            <!-- [4] Khanna et al. 2024 -->
+            <li id="r4" class="ref-item">
+                <div class="ref-head">
+                    <span class="num">[4]</span>
+                    Khanna, S., Chattopadhyay, C., &amp; Kundu, S. (2024).
+                    <em>Enhancing Fruit and Vegetable Detection in Unconstrained Environment with a Novel Dataset.</em> arXiv:2409.13330.
+                </div>
+                <div class="ref-link">
+                    <a href="https://arxiv.org/abs/2409.13330" target="_blank" rel="noopener">https://arxiv.org/abs/2409.13330</a>
+                    &nbsp;|&nbsp;
+                    <a href="https://arxiv.org/pdf/2409.13330" target="_blank" rel="noopener">https://arxiv.org/pdf/2409.13330</a>
+                </div>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Releases FRUVEG67 and trains a YOLOv7-based ensemble (FVDNet) with SSDA labeling; reports results at IoU 0.5/0.75/0.9.</p>
+                    <p><strong>Reliability:</strong> Preprint (not peer-reviewed); methods are detailed, but claims await independent benchmarking and dataset audits.</p>
+                </div>
+            </li>
+
+            <!-- [5] Ángeles Cerón et al. 2021 -->
+            <li id="r5" class="ref-item">
+                <div class="ref-head">
+                    <span class="num">[5]</span>
+                    Ángeles Cerón, J. C., Chang, L., Ochoa-Ruiz, G., &amp; Ali, S. (2021).
+                    <em>Assessing YOLACT++ for real-time and robust instance segmentation of medical instruments in endoscopic procedures.</em> arXiv:2103.15997.
+                </div>
+                <div class="ref-link">
+                    <a href="https://arxiv.org/abs/2103.15997" target="_blank" rel="noopener">
+                        https://arxiv.org/abs/2103.15997
+                    </a>
+                </div>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Adapts YOLACT/YOLACT++ for endoscopic tool masks with near real-time throughput and robustness to specularities and blur.</p>
+                    <p><strong>Reliability:</strong> Preprint with follow-up mentions; evaluations are promising but limited to specific datasets and clinical contexts.</p>
+                </div>
+            </li>
+
+            <!-- [6] Jain et al. 2022 -->
+            <li id="r6" class="ref-item">
+                <div class="ref-head">
+                    <span class="num">[6]</span>
+                    Jain, P., Chawla, P., Masud, M., Mahajan, S., &amp; Pandit, A. K. (2022).
+                    <em>Automated Identification Algorithm Using CNN for Computer Vision in Smart Refrigerators.</em>
+                    <em>Computers, Materials &amp; Continua</em>, 71(2), 3337–3353.
+                    <strong>DOI:</strong> <a href="https://doi.org/10.32604/cmc.2022.023053" target="_blank" rel="noopener">
+                    https://doi.org/10.32604/cmc.2022.023053
+                </a>
+                </div>
+                <div class="ref-body">
+                    <p><strong>Synopsis:</strong> Proposes a CNN-based computer vision algorithm for smart refrigerators, integrating <em>InceptionV3</em> and <em>MobileNetV3</em> architectures for automated food identification and weight-based recognition.
+                        The system transmits real-time food name, quantity, and weight data to a <em>cloud server (Google Firebase)</em>, accessible through the <em>“Fridge Assistant”</em> Android app. The module uses an external camera and load cell to monitor food items continuously and accurately.</p>
+
+                    <p><strong>Results:</strong> Achieved up to <strong>99.9%</strong> accuracy with <em>MobileNetV3</em> on the FRUITS360 dataset, outperforming prior models like <em>InceptionV3</em> and <em>ResNet-50</em>. Real-time tests with an RPi-based camera module validated the approach for fruit and vegetable classification.</p>
+
+                    <p><strong>Reliability:</strong> Peer-reviewed journal article published in <em>Computers, Materials &amp; Continua</em> by Tech Science Press; includes detailed architecture diagrams, dataset analysis, and real-time experimental validation.</p>
+                </div>
+            </li>
+
+
         </ol>
-    </details>
 
-
-    <div class="page-grid">
-
-        <!-- Left TOC -->
-        <aside class="article-toc" aria-label="Table of Contents">
-            <div class="toc-title">Table of Contents</div>
-            <ol class="toc-list">
-                <li><a href="#bg1"><span class="idx">1.</span> Background</a></li>
-                <li><a href="#how-it-works"><span class="idx">2.</span> How it Works</a></li>
-                <li><a href="#ai-sensor"><span class="idx">3.</span> AI Sensor</a></li>
-                <li><a href="#method1"><span class="idx">4.</span> Datasets & Models </a></li>
-                <li><a href="#experiments"><span class="idx">5.</span> Experiments & Results</a></li>
-                <li><a href="#strengths"><span class="idx">6.</span> Strengths & Applications</a></li>
-                <li><a href="#limitations"><span class="idx">7.</span> Limitations / Future Work</a></li>
-            </ol>
-        </aside>
-
-
-        <!-- Right Content -->
-        <div>
-            <section id="bg" class="lesson">
-                <h1>Food Identification in Refrigerators</h1>
-
-                <audio controls preload="metadata">
-                    <source src="/assets/fridge.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-
-                <h2 id="bg1" >1. Background </h2>
-                <section id="background">
-                    <div class="grid cols-2">
-                        <div class="card">
-                            <p>
-                                Managing refrigerator food items is challenging because items that are “out of sight, out of mind” problem, which leads to <em>over-purchasing</em> and <em>waste</em>. Traditional solutions such as barcode scanning sensor can monitor stock levels but fail when facing
-                                unlabeled occluded, distance and small food items in real-world refrigerator scenarios.
-                            </p>
-                            <ul class="mini">
-                                <li><strong>Barcode scanning:</strong> Only works for labeled items; unpackaged food or fruits and vegetables cannot be recognized.</li>
-                                <li><strong>Generic vision models (close-range):</strong> Often fail with occlusion, backlight/glare, and longer distances.</li>
-                            </ul>
-                        </div>
-                        <div class="card media">
-                            <img class="img" src="./assets/food.png" alt="Fridge motivation illustration" loading="lazy" decoding="async">
-                            <div class="legend">ImageSource: AI-generated illustration.</div>
-                        </div>
-                    </div>
-                </section>
-
-                <h2 id="how-it-works">2. How it Works</h2>
-                <!--<p> To overcome the limitations of traditional solutions such as barcode scanning and generic vision models (Fig. 1), we propose a computer vision–based smart refrigerator system. By integrating an onboard camera and real-time object detection model, the system can automatically recognize, track, and log food items without relying on labels or manual input</p>
-                <p>Now, let’s take a closer look at how it works.</p>-->
-
-
-                <div class="gradient-box blue-box">
-                    <p>
-                        To overcome the limitations of traditional solutions such as barcode scanning and generic vision models (Fig. 1),
-                        we propose a <strong>computer vision–based smart refrigerator system</strong>.
-                        By integrating an onboard camera and real-time object detection model, the system can
-                        <strong>automatically recognize, track, and log food items</strong> without relying on labels or manual input.
-                    </p>
-                </div>
-
-
-                    <p>
-                        Now, let’s take a closer look at <strong>how it works</strong>.
-                    </p>
-
-                <section id="background1">
-                    <div class="grid cols-2">
-                        <div class="card">
-                            <p>
-                                How it works (real time): when the door opens, the camera sensing starts streaming frames to a local GPU PC;
-                                a one-stage model (BroadFPN-YOLACT) runs per-frame inference and overlays the label (e.g., “cola”),
-                                then logs the item to inventory. See Dai (2024) Fig.1 <a href="refs.html#r1">[1]</a></p>
-                            <ul class="mini">
-                                <li>Real-time recognition: Each door event is captured; the camera classifies the item and whether it’s entering or leaving.</li>
-                                <li>Immediate inventory update: The system logs/updates item ID, quantity, in/out state, timestamp (and optional expiry/owner), keeping the ledger current.</li>
-                                <li>Actionable prevention: Using these records, it triggers reminders, avoids duplicate purchases, suggests consumption plans, and auto-curates shopping lists—directly reducing food waste.</li>
-                            </ul>
-                        </div>
-                        <div class="card media">
-                            <img class="img" src="./assets/f1.png" alt="Dai (2024) Figure 1: Smart refrigerator with camera input; item recognized as 'cola'" loading="lazy" decoding="async">
-                            <div class="legend">Figure 1. Smart refrigerator with camera input. Source: Dai (2024), Fig.1, <a href="refs.html#r1">[1]</a></div>
-                        </div>
-                    </div>
-                </section>
-
-
-
-
-                <div class="gradient-box blue-box">
-                    <p>
-                        The above section described an <strong>AI-based vision system</strong> running locally on a GPU PC, where the refrigerator camera performs
-                        <strong>real-time and continuous recognition</strong> using the <strong>BroadFPN-YOLACT</strong> model to automatically identify, label,
-                        and log food items inside the fridge. This intelligent process enables <strong>continuous, autonomous monitoring</strong> of items being added
-                        or removed, maintaining accurate and up-to-date inventory records without requiring any manual scanning or labeling.
-                    </p>
-                </div>
-
-                <div class="gradient-box blue-box">
-                    <p>
-                        <strong>Building upon this foundation</strong>, the AI-based system can be further <strong>enhanced with IoT connectivity</strong>, forming a complete smart
-                        refrigeration ecosystem. In this extended setup, the recognized food data — including the item’s <em>name</em>, <em>category</em> and <em>quantity</em> — is securely <strong>transmitted to a cloud server (Google Firebase)</strong>, where it can be synchronized
-                        and accessed across multiple devices. Users can then manage and monitor their fridge contents remotely via the
-                        <strong>“Fridge Assistant” Android application</strong>, which provides real-time updates, expiry notifications, and consumption reminders.
-                    </p>
-                </div>
-
-                <div class="gradient-box blue-box">
-                    <p>
-                        The same database can also be displayed on a <strong>touchscreen interface</strong> mounted on the refrigerator door, ensuring that both local and
-                        remote users can instantly view current inventory information. Together, these integrations combine
-                        <strong>AI-based visual recognition</strong> with <strong>IoT-driven connectivity</strong>, creating a seamless, intelligent food management system that
-                        operates in <strong>real time and continuously</strong>, helping to reduce waste and enhance everyday convenience.
-                    </p>
-                </div>
-
-
-
-
-
-
-
-
-
-                <section class="figure-3block">
-
-                    <!-- 上面两张小图 -->
-                    <div class="top-row">
-                        <figure style="text-align: center;">
-                            <img src="./assets/cameraSensing.png" alt="Small figure A" loading="lazy" decoding="async">
-                            <figcaption class="legend" style="margin-top: 4px;">
-                                ImageSource: AI-generated illustration.
-                            </figcaption>
-                        </figure>
-
-                        <figure style="text-align: center;">
-                            <img src="./assets/f4.png" alt="Small figure B" loading="lazy" decoding="async">
-                            <figcaption class="legend" style="margin-top: 4px;">
-                                Smart Refrigerator <a href="refs.html#r6">[6]</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-
-                    <!-- 下面一张大图 -->
-                    <div class="bottom-row" style="text-align: center; margin-top: 10px;">
-                        <figure>
-                            <img src="./assets/fridgeApp.jpg" alt="Large figure" loading="lazy" decoding="async">
-                            <figcaption class="legend" style="margin-top: 6px;">
-                                Fridge Assistant App <a href="refs.html#r6">[6]</a>
-                            </figcaption>
-                        </figure>
-                    </div>
-
-                </section>
-
-                <h2 id="ai-sensor">3. AI Sensor </h2>
-
-
-                <div class="gradient-box blue-box">
-                    <h3>AI Vision Sensor Overview</h3>
-                    <ul>
-                        <li>
-                            <strong>Intelligent sensing module:</strong> Combines a <em>camera</em>, <em>servo control</em>, and <em>deep-learning algorithms</em> to form an AI-driven vision system capable of recognizing and tracking food items automatically.
-                        </li>
-
-                        <li>
-                            <strong>Beyond traditional methods:</strong> Unlike <em>barcode scanning</em>—which only identifies labeled goods—and <em>generic vision models</em> that often fail under <strong>occlusion, glare, or distance variation</strong>, the AI sensor can continuously perceive and interpret the refrigerator environment in <strong>real time</strong>.
-                        </li>
-
-                        <li>
-                            <strong>Automated operations:</strong> Performs <strong>object recognition</strong>, <strong>tracking</strong>, and <strong>data transmission</strong> automatically whenever items are placed inside or removed, requiring no manual input.
-                        </li>
-
-                        <li>
-                            <strong>Integrated intelligence:</strong> By combining <strong>computer vision</strong>, <strong>edge AI processing</strong>, and <strong>IoT connectivity</strong>, the system transforms a refrigerator from a passive storage unit into an <em>active, context-aware device</em>.
-                        </li>
-
-                        <li>
-                            <strong>Smart food management:</strong> Detects both <strong>packaged and unpackaged</strong> foods, monitors <strong>quantity</strong> and <strong>freshness</strong> through image and weight data, and synchronizes records to <em>cloud platforms like Google Firebase</em> for remote monitoring.
-                        </li>
-
-                        <li>
-                            <strong>Outcome:</strong> Offers a <strong>comprehensive, autonomous, and connected solution</strong> for modern food management, overcoming the key limitations of older recognition technologies.
-                        </li>
-                    </ul>
-                </div>
-
-
-
-
-                <section id="comparison-flip" class="lesson">
-                    <h2>AI Sensor vs Traditional Methods</h2>
-                    <p>This interactive comparison shows how <strong>AI-based camera sensing</strong> improves over traditional <em>barcode scanning</em> and <em>generic vision models</em> in real-world refrigerator applications.</p>
-
-                    <div class="flip-grid">
-                        <!-- Card 1: Barcode -->
-                        <div class="flip-card">
-                            <div class="flip-inner">
-                                <div class="flip-front">
-                                    <img src="./assets/barcode.png" alt="Barcode Scanning" class="flip-img">
-                                    <h3>Barcode Scanning</h3>
-                                    <div class="img-note">ImageSource: AI-generated illustration.</div>
-                                </div>
-                                <div class="flip-back">
-                                    <div class="content">
-                                        <h4>📦 Working Principle</h4>
-                                        <p class="scroll-tip">💡 Tip: Scroll inside this card to view all text.</p>
-                                        <ul class="bullets">
-                                            <li>A laser/optical reader scans <strong>UPC/EAN</strong> on packaged goods and looks up the product in a database.</li>
-                                        </ul>
-
-                                        <h4>✅ Advantages</h4>
-                                        <ul class="bullets good">
-                                            <li>Very <strong>low-cost</strong> hardware and simple setup.</li>
-                                            <li>High accuracy for <strong>labeled / packaged</strong> items.</li>
-                                        </ul>
-
-                                        <h4>🚫 Limitations</h4>
-                                        <ul class="bullets bad">
-                                            <li>Cannot identify <strong>unlabeled or unpackaged</strong> food (fruits, vegetables, leftovers).</li>
-                                            <li><strong>Manual</strong> scanning per item; no continuous monitoring.</li>
-                                            <li>No freshness/weight context; limited automation.</li>
-                                        </ul>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 2: Generic Vision -->
-                        <div class="flip-card">
-                            <div class="flip-inner">
-                                <div class="flip-front">
-                                    <img src="./assets/simpleCamera.png" alt="Generic Vision Models" class="flip-img">
-                                    <h3>Generic Vision Models</h3>
-                                    <div class="img-note">ImageSource: AI-generated illustration.</div>
-                                </div>
-                                <div class="flip-back">
-                                    <div class="content">
-                                        <h4>👁️ Working Principle</h4>
-                                        <p class="scroll-tip">💡 Tip: Scroll inside this card to view all text.</p>
-                                        <ul class="bullets">
-                                            <li>Pre-trained CNNs (e.g., <strong>ResNet / VGG / YOLO / MobileNet</strong>) classify or detect objects from a fixed camera view.</li>
-                                        </ul>
-
-                                        <h4>✅ Advantages</h4>
-                                        <ul class="bullets good">
-                                            <li>Can recognize <strong>unlabeled</strong> items from visual features.</li>
-                                            <li>Quick to prototype with common AI frameworks.</li>
-                                        </ul>
-
-                                        <h4>⚠️ Limitations</h4>
-                                        <ul class="bullets warn">
-                                            <li>Performance drops with <strong>occlusion</strong>, <strong>backlight/glare</strong>, or <strong>longer distances</strong>.</li>
-                                            <li>Single fixed viewpoint; not continuous; brittle in cluttered fridges.</li>
-                                        </ul>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3: AI-based Camera Sensing -->
-                        <div class="flip-card">
-                            <div class="flip-inner">
-                                <div class="flip-front">
-                                    <img src="./assets/cameraSensing.png" alt="AI-based Camera Sensing" class="flip-img">
-                                    <h3>AI-based Camera Sensing</h3>
-                                    <div class="img-note">ImageSource: AI-generated illustration.</div>
-                                </div>
-                                <div class="flip-back">
-                                    <div class="content">
-                                        <h4>🤖 Working Principle</h4>
-                                        <p class="scroll-tip">💡 Tip: Scroll inside this card to view all text.</p>
-                                        <ul class="bullets">
-                                            <li>Servo-controlled camera + <strong>BroadFPN-YOLACT</strong> run on door events, recognizing items in <strong>real time</strong>.</li>
-                                            <li>Syncs name/quantity/timestamp to <strong>Firebase</strong> and the mobile app.</li>
-                                        </ul>
-
-                                        <h4>✅ Advantages</h4>
-                                        <ul class="bullets good">
-                                            <li><strong>Real-time, continuous</strong> updates without manual scanning.</li>
-                                            <li>Works for <strong>unlabeled / unpackaged</strong> food.</li>
-                                            <li>Servo angles reduce <strong>occlusion</strong>; robust to glare & distance changes.</li>
-                                            <li>Full <strong>IoT</strong> integration; pairs vision with weight for higher accuracy.</li>
-                                        </ul>
-
-                                        <h4>⚠️ Limitations</h4>
-                                        <ul class="bullets warn">
-                                            <li>Higher compute/power than barcode; needs privacy-safe on-device processing.</li>
-                                            <li>Occasional calibration/maintenance for best results.</li>
-                                        </ul>
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-
-
-
-
-
-
-
-
-
-                <section id="comparison" class="lesson">
-
-
-
-
-                    <h3>Summary Comparison</h3>
-
-
-
-                    <div class="comp-card">
-                        <h3 class="comp-title">Comparison Table</h3>
-
-                        <table class="comp-table">
-                            <thead>
-                            <tr>
-                                <th class="col-feature">Feature</th>
-                                <th class="col-bc">Barcode Scanning</th>
-                                <th class="col-gvm">Generic Vision Models (Close-range)</th>
-                                <th class="col-ai">AI-based Camera Sensing</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Works for unlabeled food</td>
-                                <td><span class="dot no">No</span></td>
-                                <td><span class="dot partial">Partial</span></td>
-                                <td><span class="dot yes">Yes</span></td>
-                            </tr>
-                            <tr>
-                                <td>Handles occlusion / glare</td>
-                                <td><span class="dot no">No</span></td>
-                                <td><span class="dot warn">Weak</span></td>
-                                <td><span class="dot yes">Robust</span></td>
-                            </tr>
-                            <tr>
-                                <td>Real-time & continuous monitoring</td>
-                                <td><span class="dot no">Manual only</span></td>
-                                <td><span class="dot partial">Limited</span></td>
-                                <td><span class="dot yes">Yes</span></td>
-                            </tr>
-                            <tr>
-                                <td>Distance flexibility</td>
-                                <td><span class="dot partial">Close-range</span></td>
-                                <td><span class="dot partial">Short-range</span></td>
-                                <td><span class="dot yes">Multi-distance</span></td>
-                            </tr>
-                            <tr>
-                                <td>Integration with IoT (Firebase, app)</td>
-                                <td><span class="dot no">No</span></td>
-                                <td><span class="dot partial">Rare</span></td>
-                                <td><span class="dot yes">Full</span></td>
-                            </tr>
-                            <tr>
-                                <td>Requires manual input</td>
-                                <td><span class="dot yes neutral">Yes</span></td>
-                                <td><span class="dot partial">Sometimes</span></td>
-                                <td><span class="dot no">Fully automatic</span></td>
-                            </tr>
-                            <tr>
-                                <td>Hardware cost</td>
-                                <td><span class="dot yes neutral">Low</span></td>
-                                <td><span class="dot partial">Medium</span></td>
-                                <td><span class="dot no">Higher</span></td>
-                            </tr>
-                            <tr>
-                                <td>Recognition accuracy in fridge</td>
-                                <td><span class="dot partial">High (packaged)</span></td>
-                                <td><span class="dot partial">Medium</span></td>
-                                <td><span class="dot yes">Very High</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-
-
-
-                    <br>
-                    <br>
-
-
-                <p>Next, let’s talk about the technologies used and how the food recognition works.</p>
-
-                <section id="method">
-                    <h2 id="method1" >4. Datasets and Models</h2>
-
-                    <div class="gradient-box blue-box">
-                        <h3>Dataset and Simu-Augmentation</h3>
-                        <p>
-                            A <strong>custom dataset</strong> was created to represent real refrigerator environments, covering variations in lighting, distance, occlusion, and reflections.
-                            It includes <strong>over 80 types of food items</strong>—such as beverages, snacks, vegetables, soy milk, and side dishes—with more than 100 images per class
-                            captured under different viewing angles and backgrounds.
-                        </p>
-
-                        <p>
-                            To make the dataset more realistic, a <strong>two-stage data augmentation method</strong> called <em>Simu-Augmentation</em> was applied:
-                        </p>
-
-                        <ul>
-                            <li><strong>Object-level:</strong> Adds changes in size, rotation, blur, lighting, and partial occlusion to simulate natural variations.</li>
-                            <li><strong>Scene-level:</strong> Places objects into different backgrounds and handheld scenes to mimic real fridge usage.</li>
-                        </ul>
-
-                        <p>
-                            This <strong>Simu-Augmented dataset</strong> provides thousands of diverse and realistic samples,
-                            helping the <em>BroadFPN-YOLACT</em> model achieve strong recognition performance under real-world conditions.<a class="ref" href="refs.html#r1">[1]</a>
-                        </p>
-                    </div>
-
-
-
-                    <div class="gradient-box blue-box">
-                        <h3>Models: YOLACT and BroadFPN-YOLACT</h3>
-                        <p>
-                            <strong>YOLACT</strong><a class="ref" href="refs.html#r3">[3]</a> (You Only Look At Coefficients) is a <strong>real-time instance segmentation model</strong>
-                            that detects and segments multiple objects in one forward pass, achieving fast and accurate food recognition in smart refrigerators.
-                        </p>
-                        <p>
-                            <strong>BroadFPN-YOLACT</strong> is an improved version that adds a new <strong>P2 layer</strong> to the Feature Pyramid Network (FPN),
-                            capturing finer details of small and distant objects. This enhancement enables the model to perform more robustly under
-                            real-world conditions such as occlusion, glare, and lighting variation.
-                        </p>
-                        <p>
-                            Combined with <em>Simu-Augmentation</em>, BroadFPN-YOLACT <a href="refs.html#r1">[1]</a> delivers <strong>higher precision</strong> and <strong>better recognition performance</strong>
-                            across various distances, making it well-suited for intelligent food management systems.
-                        </p>
-                    </div>
-
-
-
-
-
-
-
-
-                    <div class="card">
-                        <img class="img" src="./assets/YOLACT.png" alt="" loading="lazy" decoding="async">
-                        <div class="legend">
-                            YOLACT for real-time and robust instance segmentation of medical instruments in endoscopic procedures. ImageSource:.
-                            <a href="refs.html#r5">[5]</a>
-                        </div>
-                        <img class="img" src="./assets/1.png" alt="" loading="lazy" decoding="async">
-                        <div class="legend">BroadFPN-YOLACT ImageSource: <a href="refs.html#r1">[1]</a></div>
-                    </div>
-                </section>
-
-
-                    <h2 id="experiments">5. Experiments and Results</h2>
-                    <div class="gradient-box blue-box">
-                        <h2>Experiment</h2>
-                        <ul>
-                            <li>
-                                <strong>Setup:</strong> A small beverage cup was captured at three distances —
-                                (A-1) 20 cm, (A-2) ≈50 cm, and (A-3) ≈80 cm — using a webcam in real refrigerator conditions.
-                            </li>
-                            <li>
-                                <strong>Baseline:</strong> The <em>YOLACT</em> model was tested under the same conditions.
-                                It struggled to recognize small or distant items, especially at extreme ranges.
-                            </li>
-                            <li>
-                                <strong>Improved model:</strong> The proposed <em>BroadFPN-YOLACT</em> accurately detected and labeled
-                                objects across all distances by leveraging the added <strong>P2 layer</strong> for finer detail capture.
-                            </li>
-
-                        </ul>
-
-                        <h3>Simu-Augmentation Experiment <sup><a href="refs.html#r1">[1]</a></sup></h3>
-                        <ul>
-                            <li>
-                                <strong>Purpose:</strong> To evaluate the effect of the proposed <em>Simu-Augmentation</em> method on recognition performance under
-                                real-world conditions with different lighting, orientations, and occlusions.
-                            </li>
-                            <li>
-                                <strong>Process:</strong> The same dataset was used, enhanced through two stages of simulated augmentation —
-                                <em>object-level</em> (rotation, scaling, blur) and <em>scene-level</em> (background variation, handheld positions).
-                            </li>
-                            <li>
-                                <strong>Comparison:</strong> Models trained with Simu-Augmentation were compared against those trained with conventional augmentation.
-                            </li>
-
-                        </ul>
-                    </div>
-
-                    <img class="img" src="./assets/e.png" alt="ImageSource:" loading="lazy" decoding="async">
-                    <div class="legend">ImageSource: <a href="refs.html#r1">[1]</a></div>
-                    <br>
-
-                    <div class="card">
-                        <h3>Simu-Augmentation <sup><a class="ref" href="refs.html#r1">[1]</a></sup></h3>
-                        <p>
-                            <strong>Simu-Augmentation</strong> is a two-stage data augmentation technique designed to enhance recognition performance in complex, real-world scenarios.
-                            It simulates actual refrigerator conditions to make the dataset more representative and robust.
-                        </p>
-                        <p>
-                            <strong>Stage 1 – Object-level:</strong> Adds variations in size, rotation, blur, distortion, and lighting to simulate diverse object appearances.
-                        </p>
-                        <p>
-                            <strong>Stage 2 – Scene-level:</strong> Embeds objects into different backgrounds and handheld conditions, replicating realistic fridge interactions.
-                        </p>
-                        <p>
-                            This method creates <strong>thousands of realistic samples</strong>, improving the model’s ability to recognize small, distant, or occluded items with
-                            greater accuracy during deployment.
-                        </p>
-                        <strong>Stage 1 – Object-level:</strong> <p>(A) Examples of an object captured under different conditions; (B) Results of Simu-Augmentation.</p>
-                        <img class="img" src="./assets/ca.png" alt="" loading="lazy" decoding="async">
-                        <div class="legend">Sample results of Experiment 2... <a href="refs.html#r1">[1]</a></div>
-
-
-
-<br>
-
-
-                        <strong>Stage 2 – Scene-level:</strong>
-                        <img class="img" src="./assets/e2.png" alt="" loading="lazy" decoding="async">
-                        <div class="legend">ImageSource: <a href="refs.html#r1">[1]</a></div>
-                        <br>
-                        <img class="img" src="./assets/t.png" alt="" loading="lazy" decoding="async">
-                        <div class="legend">Comparison of AI models... <a href="refs.html#r1">[1]</a></div>
-                    </div>
-
-                    <div class="gradient-box blue-box">
-                        <h2>Results</h2>
-
-                        <h3>Experiment 2 – Simu-Augmentation <sup><a href="refs.html#r1">[1]</a></sup></h3>
-                        <ul>
-                            <li><strong>Panel (A):</strong> Shows the same object under different lighting, angles, and occlusions.</li>
-                            <li><strong>Panel (B):</strong> Displays detection results using <em>Simu-Augmentation</em>.</li>
-                            <li><strong>Finding:</strong> The method improved recognition consistency and accuracy compared with traditional augmentation,
-                                especially for rotated items.</li>
-                        </ul>
-
-                        <h3>Experiment 3 – Integrated Model <sup><a href="refs.html#r1">[1]</a></sup></h3>
-                        <ul>
-                            <li><strong>Panel (A):</strong> Sample inputs of different-sized food items.</li>
-                            <li><strong>Panel (B–C):</strong> Comparison between baseline <em>YOLACT</em> and the integrated
-                                <em>BroadFPN-YOLACT + Simu-Augmentation</em> approach.</li>
-                            <li><strong>Result:</strong> The integrated model achieved higher detection accuracy (up to <strong>+9.6% mAP</strong>)
-                                and stronger robustness under real-world conditions.</li>
-                        </ul>
-                    </div>
-<br>
-                    <br>
-
-
-                    <h2 id="strengths">6. Strengths & Applications</h2>
-                    <div class="gradient-box blue-box">
-
-                        <ul>
-                            <li>
-                                ⚡ <strong>Real-time performance:</strong> Achieves <em>instant food recognition</em> through a single camera and deep-learning model,
-                                updating inventory automatically without manual input.
-                            </li>
-                            <li>
-                                🧠 <strong>High robustness:</strong> Enhanced detection across various <em>distances, rotated, and hand occlusions</em> thanks to
-                                the <em>BroadFPN-YOLACT</em> model and realistic <em>Simu-Augmentation</em> dataset.
-                            </li>
-                            <li>
-                                💰 <strong>Low cost and easy deployment:</strong> Requires only a webcam and GPU-enabled PC, making it adaptable for both home
-                                and commercial refrigerators.
-                            </li>
-                            <li>
-                                🌐 <strong>IoT integration:</strong> Seamlessly connects with <em>Google Firebase</em> and the <em>“Fridge Assistant”</em> Android app
-                                for cloud-based storage, remote monitoring, and real-time notifications.
-                            </li>
-                            <li>
-                                🍽️ <strong>Practical applications:</strong> Enables <em>automatic food logging</em>, <em>duplicate purchase prevention</em>, and
-                                <em>expiry-date alerts</em>, supporting smarter food management and waste reduction.
-                            </li>
-                            <li>
-                                🚀 <strong>Scalability:</strong> The AI vision framework can extend beyond home use to <em>restaurants, food retail, and warehouse monitoring</em> systems.
-                            </li>
-                        </ul>
-
-                        <p><strong>Summary:</strong> Together, these strengths make the proposed system a <em>practical and scalable solution</em>
-                            for smart, sustainable food management.</p>
-                    </div>
-<br>
-                    <br>
-
-                    <h2 id="limitations">7. Limitations / Future Work</h2>
-
-                    <div class="gradient-box blue-box">
-
-                        <ul>
-                            <li>
-                                ⚠️ <strong>Object-level limitations:</strong> In the first stage of <em>Simu-Augmentation</em>,
-                                <strong>very blurred or partially occluded objects</strong> were difficult to recognize accurately.
-                                The model occasionally missed detections or produced incorrect classifications when food edges and shapes were distorted.
-                            </li>
-
-                            <li>
-                                🌫️ <strong>Environmental complexity:</strong> Detection accuracy decreases in scenes with <em>strong reflections</em>,
-                                <em>uneven lighting</em>, or <em>cluttered refrigerator backgrounds</em>, compared with controlled lab conditions.
-                            </li>
-
-                            <li>
-                                📏 <strong>Distance sensitivity:</strong> Although <em>BroadFPN-YOLACT</em> performs well between 20–100 cm,
-                                recognition precision drops when the camera is placed too far (>1 m) or at extreme angles.
-                            </li>
-
-                            <li>
-                                🍱 <strong>Dataset scope:</strong> The dataset mainly includes <em>packaged or store-bought items</em>.
-                                Recognition of <strong>homemade foods</strong> or irregular leftovers remains challenging and requires further dataset expansion.
-                            </li>
-
-                            <li>
-                                🔒 <strong>Privacy concerns:</strong> Since the system relies on a camera inside or near the refrigerator,
-                                <strong>user privacy</strong> must be safeguarded. Future deployments will ensure that <em>image data remains local</em>,
-                                only transmitting recognition results (labels and metadata) to the cloud. Additional work will focus on <strong>on-device processing</strong>
-                                and encrypted data transfer to prevent unauthorized access.
-                            </li>
-
-                            <li>
-                                🧩 <strong>Future improvements:</strong> Future work will address current challenges by:
-                                <ul>
-                                    <li>Improving <strong>object-level augmentation</strong> for blurred and occluded objects.</li>
-                                    <li>Integrating <strong>expiry-date detection</strong> and <strong>food freshness estimation</strong>.</li>
-                                    <li>Expanding the dataset to include <strong>non-packaged and homemade foods</strong>.</li>
-                                    <li>Enhancing <strong>privacy-preserving AI</strong> through local inference and data encryption.</li>
-                                </ul>
-                            </li>
-                        </ul>
-
-                        <p>
-                            <strong>Summary:</strong> The proposed system shows strong real-world performance but still faces challenges in
-                            recognizing <em>blurred, partially hidden items</em> and ensuring <em>data privacy</em>.
-                            Future research will focus on improving robustness, dataset coverage, and privacy protection to achieve
-                            a fully reliable, secure, and intelligent smart refrigerator system.
-                        </p>
-                    </div>
-
-                </section>
-        </div>
-    </div>
+    </section>
 </main>
 
 <footer>
     <div class="container small">
-        © 2025 Food Identification · Online Tutorial. All rights reserved.<br/>
+        © 2025 Food Identification · Online Tutorial. All rights reserved.
     </div>
 </footer>
 
 <script>
-    // Mark nav active by filename
+    // Highlight active nav item
     document.addEventListener('DOMContentLoaded', function () {
         let file = location.pathname.split('/').pop() || 'index.html';
         file = file.split('?')[0].split('#')[0];
         document.querySelectorAll('nav .links a').forEach(a => {
             if (a.getAttribute('href') === file) a.classList.add('active');
         });
-
-        // Align left TOC top with the first H2 baseline
-        const pageGrid = document.querySelector('.page-grid');
-        const aside = document.querySelector('.article-toc');
-        const firstH2 = document.querySelector('#bg h2:nth-of-type(1)');
-        const alignTOC = () => {
-            if(!pageGrid || !aside || !firstH2) return;
-            const gridTop = pageGrid.getBoundingClientRect().top + window.scrollY;
-            const h2Top = firstH2.getBoundingClientRect().top + window.scrollY;
-            const offset = Math.max(0, Math.round(h2Top - gridTop));
-            aside.style.marginTop = offset + 'px';
-        };
-        alignTOC();
-        window.addEventListener('resize', alignTOC);
     });
-
-    // ===== TOC highlighting with "click lock" =====
-    (function(){
-        const tocLinks = Array.from(document.querySelectorAll('.article-toc a, .toc-mobile a'));
-        const ids = ['#bg','#how-it-works','#method','#strengths','#limitations'];
-        const sections = ids.map(sel => document.querySelector(sel)).filter(Boolean);
-
-        // Helper: current sticky header offset
-        function headerOffset(){
-            const cssVal = getComputedStyle(document.documentElement).getPropertyValue('--sticky-top').trim();
-            return (parseInt(cssVal, 10) || 0) + 10;
-        }
-
-        // Precompute section tops
-        let offsets = [];
-        function computeOffsets(){
-            offsets = sections.map(sec => ({
-                id: '#' + sec.id,
-                top: sec.getBoundingClientRect().top + window.scrollY
-            })).sort((a,b)=>a.top-b.top);
-        }
-        computeOffsets();
-        window.addEventListener('resize', () => { computeOffsets(); if(!lockActive) updateByScroll(true); });
-
-        // Visual state
-        function setActive(href){
-            tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === href));
-        }
-
-        // Lock: When user clicks a TOC link, the active blue stays on that item
-        let lockActive = null;
-
-        // Release lock on any user-initiated scroll gesture
-        const release = () => { if(lockActive){ lockActive = null; updateByScroll(true); } };
-        ['wheel','touchstart','keydown'].forEach(evt => window.addEventListener(evt, release, {passive:true}));
-
-        // Smooth scroll but prevent default anchor jump
-        tocLinks.forEach(a => {
-            a.addEventListener('click', e => {
-                const href = a.getAttribute('href');
-                const target = document.querySelector(href);
-                if (!target) return;
-                e.preventDefault();
-                lockActive = href;         // freeze highlight on clicked item
-                setActive(href);
-
-                // close mobile <details> if open
-                const details = a.closest('details.toc-mobile');
-                if(details) details.open = false;
-
-                // Smooth scroll to precise offset under sticky header
-                const top = target.getBoundingClientRect().top + window.scrollY - headerOffset();
-                window.scrollTo({ top, behavior: 'smooth' });
-            });
-        });
-
-        // Scroll-driven highlight (ignored while locked)
-        let ticking = false;
-        function onScroll(){
-            if (ticking || lockActive) return;
-            ticking = true;
-            requestAnimationFrame(()=>{ updateByScroll(); ticking = false; });
-        }
-        window.addEventListener('scroll', onScroll, {passive:true});
-
-        function updateByScroll(force=false){
-            if (lockActive && !force) return; // respect lock
-            const pos = window.scrollY + headerOffset();
-            // Find interval [top_i, top_{i+1})
-            let current = offsets.length ? offsets[0].id : null;
-            for (let i=0; i<offsets.length; i++){
-                const start = offsets[i].top;
-                const end = (i < offsets.length - 1) ? offsets[i+1].top : Number.POSITIVE_INFINITY;
-                if (pos >= start - 1 && pos < end - 1){
-                    current = offsets[i].id;
-                    break;
-                }
-            }
-            if (current) setActive(current);
-        }
-
-        // Initial paint
-        updateByScroll(true);
-
-        // If page loaded with a hash, lock & align to that section
-        if (location.hash && document.querySelector(location.hash)){
-            lockActive = location.hash;
-            setActive(lockActive);
-            const to = document.querySelector(location.hash).getBoundingClientRect().top + window.scrollY - headerOffset();
-            window.scrollTo(0, to);
-        }
-
-        // Keep offsets fresh after fonts/images load shifts
-        window.addEventListener('load', () => { computeOffsets(); updateByScroll(true); });
-    })();
 </script>
 </body>
 </html>
