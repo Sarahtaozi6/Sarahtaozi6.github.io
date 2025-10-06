@@ -169,6 +169,51 @@
 
 
 
+         #datasets .grid.cols-2{ display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
+        @media (max-width:1024px){ #datasets .grid.cols-2{ grid-template-columns:1fr; } }
+
+        #datasets .card{ background:#fff; border:1px solid #e6eaf2; border-radius:12px; box-shadow:0 8px 24px rgba(15,23,42,.06); padding:16px 18px; }
+
+        /* 章节大标题（只作用于 #datasets 直系的 h2） */
+        #datasets > h2{
+            font-size: clamp(1.25rem, 1.1rem + .6vw, 1.7rem);
+            margin: 0 0 .6rem;
+        }
+
+        /* 卡片里的小标题 */
+        #datasets .card h2{
+            margin:.1rem 0 .2rem;
+            font-size:1.38rem;
+        }
+
+
+        #datasets h3{ margin:.1rem 0 .5rem; font-size:1.05rem; color:#0f172a; }
+
+        /* Emoji list */
+        #datasets ul{ list-style:none; padding:0; margin:.4rem 0 .2rem 0; }
+        #datasets li{ display:flex; gap:10px; align-items:flex-start; margin:.5rem 0; line-height:1.7; color:#0f172a; }
+        #datasets .emj{
+            flex:0 0 1.6em;              /* fixed width for alignment */
+            display:inline-flex; align-items:center; justify-content:center;
+            font-size:1.25rem;           /* emoji size */
+            line-height:1; margin-top:.2rem;
+            filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
+        }
+        /* subtle hover “motion” */
+        #datasets li:hover .emj{ transform: translateY(-1px) scale(1.05); transition: transform .15s ease; }
+        #datasets .muted{ color:#64748b; }
+
+
+
+
+
+        /* 紧一下 #datasets 与标题之间的距离（保险起见把 section 和 grid 的上边距都设 0） */
+        section#datasets {
+            margin-top: 0;
+            padding-top: 0;
+        }
+
+
 
 
 
@@ -199,9 +244,7 @@
             <li><a href="#bg">1. Background</a></li>
             <li><a href="#sensor">2. Sensor</a></li>
 
-
             <li><a href="#datasets">3. Datasets &amp; Models</a></li>
-            <li><a href="#examples">4. Examples</a></li>
             <li><a href="#experimental">4. Experimental</a></li>
             <li><a href="#results-fvdnet">5. Results: YOLO vs FVDNet</a></li>
             <li><a href="#strengths">6. Strengths &amp; Applications</a></li>
@@ -218,9 +261,7 @@
                 <li><a href="#bg"><span class="idx">1.</span> Background</a></li>
                 <li><a href="#sensor"><span class="idx">2.</span> Sensor</a></li>
 
-
                 <li><a href="#datasets"><span class="idx">3.</span> Datasets &amp; Models</a></li>
-                <li><a href="#examples"><span class="idx">4.</span> Examples</a></li>
                 <li><a href="#experimental"><span class="idx">4.</span> Experimental</a></li>
                 <li><a href="#results-fvdnet"><span class="idx">5.</span> Results: YOLO vs FVDNet</a></li>
                 <li><a href="#strengths"><span class="idx">6.</span> Strengths &amp; Applications</a></li>
@@ -259,13 +300,78 @@
                         </div>
                     </div>
                 </section>
+                <h3>Examples</h3>
 
-                <h2>2. Sensor</h2>
-                <br>
+                <section id="examples" style="padding:32px 0; background:#fafafa;">
+
+                    <div style="
+    display:flex; justify-content:center; align-items:stretch; gap:24px;
+    flex-wrap:nowrap; max-width:1120px; margin:0 auto;
+  ">
+
+                        <!-- 卡片 1 -->
+                        <figure style="
+      width:340px; background:#fff; border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08); padding:14px; margin:0;
+      display:flex; flex-direction:column; transition:all 0.3s ease;
+    "
+                                onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)';"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.08)';">
+                            <img src="assets/m.png" alt="Market scene detection example"
+                                 style="width:100%; height:200px; object-fit:cover; border-radius:10px;">
+                            <figcaption style="margin:12px 2px 6px; font-size:15px; line-height:1.55; color:#222; text-align:left;">
+                                Detection in a busy market with illumination/occlusion/clutter.
+                            </figcaption>
+                            <div style="margin:0 2px; font-size:12px; color:#8a8a8a; text-align:left;">
+                                Image Source: AI-generated illustration.
+                            </div>
+                        </figure>
+
+                        <!-- 卡片 2 -->
+                        <figure style="
+      width:340px; background:#fff; border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08); padding:14px; margin:0;
+      display:flex; flex-direction:column; transition:all 0.3s ease;
+    "
+                                onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)';"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.08)';">
+                            <img src="assets/f3.png" alt="Open-refrigerator example"
+                                 style="width:100%; height:200px; object-fit:cover; border-radius:10px;">
+                            <figcaption style="margin:12px 2px 6px; font-size:15px; line-height:1.55; color:#222; text-align:left;">
+                                Open-category refrigerator image-multiple small items at distance.
+                            </figcaption>
+                            <div style="margin:0 2px; font-size:12px; color:#8a8a8a; text-align:left;">
+                                Image Source: AI-generated illustration.
+                            </div>
+                        </figure>
+
+                        <!-- 卡片 3 -->
+                        <figure style="
+      width:340px; background:#fff; border-radius:12px;
+      box-shadow:0 6px 18px rgba(0,0,0,.08); padding:14px; margin:0;
+      display:flex; flex-direction:column; transition:all 0.3s ease;
+    "
+                                onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)';"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 18px rgba(0,0,0,0.08)';">
+                            <img src="assets/p3.png" alt="Wild fruits example"
+                                 style="width:100%; height:200px; object-fit:cover; border-radius:10px;">
+                            <figcaption style="margin:12px 2px 6px; font-size:15px; line-height:1.55; color:#222; text-align:left;">
+                                A variety of fruits captured in their natural growing environments — including orchards or farms.
+                            </figcaption>
+                            <div style="margin:0 2px; font-size:12px; color:#8a8a8a; text-align:left;">
+                                Image Source: AI-generated illustration.
+                            </div>
+                        </figure>
+
+                    </div>
+                </section>
+
 
                 <!-- 2. AI Sensor -->
 
                 <section id="sensor" style="margin:0; padding:0; background:transparent !important;">
+                    <h2>2. Sensor</h2>
+                    <br>
 
                     <div id="sensorCard"
                          style="
@@ -319,92 +425,23 @@
                             <img src="./assets/phone.png"
                                  alt="AI Vision"
                                  style="max-width:95%; border-radius:12px; box-shadow:0 6px 18px rgba(15,23,42,0.08); transition:transform .3s ease;">
-                            <div style="font-size:.85rem; color:#64748b; margin-top:.4rem;">ImageSource: AI-generated illustration.</div>
+                            <div style="font-size:.85rem; color:#64748b; margin-top:.4rem;">Image Source: AI-generated illustration.</div>
                         </div>
                     </div>
                 </section>
 
+         <!-- 3. Datasets & Methods  -->
 
-
-
-
-
-<br>
                 <br>
                 <br>
-
-                <!-- 2. Datasets & Methods in the Wild -->
-                <!--<section id="datasets">
-                    <h2>3. Datasets and Models</h2>
-
-
-
-                    <div class="grid cols-2">
-                        <div id="fruveg67" class="card">
-                            <h2>Dataset</h2>
-                            <h3>FRUVEG67 (Unconstrained produce) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
-                            <p><strong>Dataset used in this study:</strong> <em>FRUVEG67</em> covers <b>67</b> fruit and vegetable categories with about <b>5,000 images</b>. The label space includes <b>35 vegetables</b> and <b>32 fruits</b>. Around <b>2,000</b> images are manually annotated; for the remaining images the authors adopt a <b>semi-supervised learning</b> pipeline (<b>SSDA</b>) that iteratively generates object annotations.</p>
-
-                                <ul style="margin:.4rem 0 .6rem 1.2rem; line-height:1.7;">
-                                    <li><strong>Scenes:</strong> markets, orchards, kitchen countertops, open refrigerators.</li>
-                                    <li><strong>Composition:</strong> 3,500 multi-object unconstrained images + 1,500 single-object images.</li>
-                                    <li><strong>Annotation:</strong> Manual (≈2k) + SSDA auto-labeling (confidence ≥ 0.5, 4 iterations).</li>
-                                    <li><strong>Preprocessing:</strong> Resize 640×640 px, normalization, Gaussian smoothing, histogram equalization.</li>
-                                    <li><strong>Split:</strong> 70 % train · 20 % test · 10 % validation.</li>
-                                </ul>
-
-                        </div>
-                        <div id="fvdnet" class="card">
-                            <h2>Model</h2>
-                            <h3>FVDNet (Fruit and Vegetable Detection Network) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
-
-                            <p><strong>Model proposed in this study:</strong> <em>FVDNet</em> is an ensemble-based object detection network designed for <b>fruit and vegetable recognition in unconstrained environments</b>. It extends the <b>YOLOv7</b> framework, incorporates a <b>semi-supervised data annotation</b> pipeline (SSDA), and introduces a <b>Jensen–Shannon Divergence (JSD)</b>-based loss to improve localization accuracy—especially for small or occluded items.</p>
-
-                            <ul style="margin:.4rem 0 .6rem 1.2rem; line-height:1.7;">
-                                <li><strong>Architecture:</strong> Built upon YOLOv7 backbone and neck (pre-trained on MS-COCO) with three grid sizes (32, 16, 8) for multi-scale detection.</li>
-                                <li><strong>Loss Function:</strong> Combines Focal Loss with Jensen–Shannon Divergence (JSD) to align predicted and ground-truth bounding-box distributions modeled as Gaussians.</li>
-                                <li><strong>Semi-Supervised Labeling (SSDA):</strong> Iteratively trains YOLOv7, auto-labels high-confidence (≥0.5) samples, and refines annotations across four rounds.</li>
-                                <li><strong>Backbones Tested:</strong> ResNet-152, DenseNet-169, and InceptionNet for comparative analysis.</li>
-                                <li><strong>Performance:</strong> Achieved <b>mean Average Precision (mAP)</b> of <b>0.78</b> on FRUVEG67, outperforming YOLOv5/6/7 on most categories.</li>
-                            </ul>
-                        </div>
-
-
-                    </div>
-                </section>-->
-                <h2>3. Datasets and Models</h2>
                 <section id="datasets">
-
-                    <!-- Inline CSS: emoji bullets + layout -->
-                    <style>
-                        #datasets .grid.cols-2{ display:grid; grid-template-columns:1fr 1fr; gap:22px; align-items:start; }
-                        @media (max-width:1024px){ #datasets .grid.cols-2{ grid-template-columns:1fr; } }
-
-                        #datasets .card{ background:#fff; border:1px solid #e6eaf2; border-radius:12px; box-shadow:0 8px 24px rgba(15,23,42,.06); padding:16px 18px; }
-                        #datasets h2{ margin:.1rem 0 .2rem; font-size:1.15rem; }
-                        #datasets h3{ margin:.1rem 0 .5rem; font-size:1.05rem; color:#0f172a; }
-
-                        /* Emoji list */
-                        #datasets ul{ list-style:none; padding:0; margin:.4rem 0 .2rem 0; }
-                        #datasets li{ display:flex; gap:10px; align-items:flex-start; margin:.5rem 0; line-height:1.7; color:#0f172a; }
-                        #datasets .emj{
-                            flex:0 0 1.6em;              /* fixed width for alignment */
-                            display:inline-flex; align-items:center; justify-content:center;
-                            font-size:1.25rem;           /* emoji size */
-                            line-height:1; margin-top:.2rem;
-                            filter: drop-shadow(0 1px 0 rgba(0,0,0,.05));
-                        }
-                        /* subtle hover “motion” */
-                        #datasets li:hover .emj{ transform: translateY(-1px) scale(1.05); transition: transform .15s ease; }
-                        #datasets .muted{ color:#64748b; }
-                    </style>
-
+                    <h2>3. Datasets and Models</h2>
                     <div class="grid cols-2">
                         <!-- Dataset Card -->
                         <div id="fruveg67" class="card">
                             <h2>Dataset</h2>
                             <h3>FRUVEG67 (Unconstrained produce) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
-                            <p><strong>Dataset used in this study:</strong> <em>FRUVEG67</em> covers <b>67</b> fruit and vegetable categories with about <b>5,000 images</b>. The label space includes <b>35 vegetables</b> and <b>32 fruits</b>. Around <b>2,000</b> images are manually annotated; for the remaining images the authors adopt a <b>semi-supervised learning</b> pipeline (<b>SSDA</b>) that iteratively generates object annotations.</p>
+                            <p><strong>Dataset used in this study:</strong> <em>FRUVEG67</em> covers <b>67</b> fruit and vegetable categories with about <b>5,000 images</b>. The label space includes <b>35 vegetables</b> and <b>32 fruits</b>. Around <b>2,000</b> images are manually annotated; for the remaining images use adopt a <b>semi-supervised learning</b> pipeline (<b>SSDA</b>) that iteratively generates object annotations.</p>
 
                             <ul>
                                 <li><span class="emj" aria-hidden="true">🗺️</span><span><strong>Scenes:</strong> markets, orchards, kitchen countertops, open refrigerators.</span></li>
@@ -413,14 +450,15 @@
                                 <li><span class="emj" aria-hidden="true">🧰</span><span><strong>Preprocessing:</strong> Resize 640×640 px, normalization, Gaussian smoothing, histogram equalization.</span></li>
                                 <li><span class="emj" aria-hidden="true">📐</span><span><strong>Split:</strong> 70% train · 20% test · 10% validation.</span></li>
                             </ul>
-                            <p class="muted">Note: RGB images captured by commodity/smartphone cameras are sufficient.</p>
+                            <p class="muted" style="font-size:0.8rem; color:#64748b; margin-top:.3rem;">Note: RGB images captured by commodity/smartphone cameras are sufficient.</p>
                         </div>
+
 
                         <!-- Model Card -->
                         <div id="fvdnet" class="card">
                             <h2>Model</h2>
                             <h3>FVDNet (Fruit &amp; Vegetable Detection Network) <sup><a class="ref" href="refs.html#r4">[4]</a></sup></h3>
-                            <p><strong>Model proposed in this study:</strong> <em>FVDNet</em> extends <b>YOLOv7</b>, integrates a <b>semi-supervised data annotation</b> loop, and adopts a <b>Jensen–Shannon Divergence (JSD)</b>–based loss to improve small/occluded object localization.</p>
+                            <p><strong>Model proposed in this study:</strong> <em>FVDNet</em> (Figure 1) extends <b>YOLOv7</b>, integrates a <b>semi-supervised data annotation</b> loop, and adopts a <b>Jensen–Shannon Divergence (JSD)</b>–based loss to improve small/occluded object localization.</p>
 
                             <ul>
                                 <li><span class="emj" aria-hidden="true">🤖</span><span><strong>Architecture:</strong> YOLOv7 backbone/neck (MS-COCO pretrain); multi-scale heads (P3/P4/P5 → strides 8/16/32).</span></li>
@@ -433,46 +471,504 @@
                     </div>
                 </section>
 
+                <p>Next: FRUVEG67 → FVDNet: We train and evaluate the model on this dataset.</p>
+                <section id="dataset-preparation" style="font-family:'Helvetica Neue',Arial,sans-serif;margin:40px 0;">
 
+                    <!-- Card 1 -->
+                    <div
+                            style="
+      background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%) !important;
+      border:1px solid #e6eaf2 !important;
+      border-left:4px solid #3b82f6 !important;
+      border-radius:12px !important;
+      padding:16px 18px !important;
+      box-shadow:0 10px 32px rgba(15,23,42,0.18) !important;
+      margin-bottom:1.2rem !important;
+      transition:transform .25s ease, box-shadow .25s ease;
+    "
+                            onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 18px 48px rgba(15,23,42,0.25)'"
+                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 10px 32px rgba(15,23,42,0.18)'">
+
+                        <h2 style="font-size:1.4em;font-weight:bold;margin:0 0 6px;">1. Prepare FRUVEG67 (or similar fruit & vegetable dataset) and Preprocess</h2>
+                        <p style="margin:0 0 12px;color:#374151;font-size:.96rem;">
+                            Resize all images to 640×640, normalize using ImageNet statistics, and apply Gaussian smoothing, histogram equalization, and multiscale augmentation to enhance small-object detection.
+                        </p>
+
+                        <pre style="background-color:#0d1117;color:#f5f5f5;padding:16px;border-radius:10px;overflow-x:auto;font-size:0.95em;margin:0;">
+# Directory structure
+FRUVEG67/
+  images/
+    train/*.jpg
+    val/*.jpg
+    test/*.jpg
+  labels/  # YOLO txt or COCO JSON
+    train/*.txt
+    val/*.txt
+    test/*.txt
+
+# Example preprocessing command
+python tools/preprocess.py \
+  &#45;&#45;img_root FRUVEG67/images \
+  &#45;&#45;out_root FRUVEG67_proc/images \
+  &#45;&#45;img_size 640 \
+  &#45;&#45;normalize imagenet \
+  &#45;&#45;gaussian 1 \
+  &#45;&#45;histeq 1 \
+  &#45;&#45;multiscale 1
+    </pre>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div
+                            style="
+      background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%) !important;
+      border:1px solid #e6eaf2 !important;
+      border-left:4px solid #3b82f6 !important;
+      border-radius:12px !important;
+      padding:16px 18px !important;
+      box-shadow:0 10px 32px rgba(15,23,42,0.18) !important;
+      transition:transform .25s ease, box-shadow .25s ease;
+    "
+                            onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 18px 48px rgba(15,23,42,0.25)'"
+                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 10px 32px rgba(15,23,42,0.18)'">
+
+                        <h2 style="font-size:1.4em;font-weight:bold;margin:0 0 6px;">2. Start Baseline Training (Single Model: YOLOv7)</h2>
+                        <p style="margin:0 0 12px;color:#374151;font-size:.96rem;">
+                            Train the YOLOv7 baseline using the processed FRUVEG67 dataset for 100 epochs with batch size 16 and image size 640.
+                        </p>
+
+                        <pre style="background-color:#0d1117;color:#f5f5f5;padding:16px;border-radius:10px;overflow-x:auto;font-size:0.95em;margin:0;">
+# Train YOLOv7 baseline
+python train.py &#45;&#45;model yolov7 &#45;&#45;img 640 &#45;&#45;epochs 100 &#45;&#45;batch 16 \
+  &#45;&#45;data configs/fruveg67.yaml &#45;&#45;device 0
+
+# Evaluation
+python eval.py &#45;&#45;weights runs/exp/best.pt \
+  &#45;&#45;data configs/fruveg67.yaml &#45;&#45;iou 0.5 0.75 0.9
+    </pre>
+                    </div>
+
+                </section>
+
+
+
+
+                <section id="data-preprocessing" style="margin:0;padding:0;background:transparent;">
+                    <div
+                            style="
+      background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%);
+      border:1px solid #e6eaf2;
+      border-left:4px solid #3b82f6;
+      border-radius:12px;
+      padding:20px 22px;
+      box-shadow:0 12px 36px rgba(15,23,42,0.20);
+      transition:transform .25s ease, box-shadow .25s ease;
+      margin-bottom:20px;"
+                            onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 56px rgba(15,23,42,0.28)'"
+                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 12px 36px rgba(15,23,42,0.20)'"
+                    >
+                        <!-- Header -->
+                        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                            <span style="display:inline-flex;width:28px;height:28px;align-items:center;justify-content:center;border-radius:999px;background:#e6efff;color:#1e40af;font-weight:700;border:1px solid #d7e4ff;">⚙️</span>
+                            <h3 style="margin:0;font-size:1.08rem;">Data Preprocessing</h3>
+                        </div>
+
+                        <p style="margin:0 0 1rem;color:#475569;font-size:.95rem;">
+                            Dataset split: <strong>train/val/test = 70/20/10</strong>
+                        </p>
+
+                        <!-- Content (only left side text) -->
+                        <div style="max-width:800px;">
+                            <h4 style="margin:0 0 .5rem;font-size:.96rem;color:#1f2a44;">Annotation Guidelines</h4>
+                            <ul style="margin:0 0 1.2rem;padding-left:1.2rem;color:#374151;line-height:1.6;">
+                                <li>Manually annotate at least <strong>20 images per class</strong> across varied backgrounds and lighting conditions.</li>
+                                <li>Standardize image size to <strong>640×640</strong> before training.</li>
+                                <li>Keep class names consistent (<em>lowercase_with_underscores</em>) to avoid duplicates.</li>
+                            </ul>
+
+                            <h4 style="margin:1rem 0 .5rem;font-size:.96rem;color:#1f2a44;">Augmentation & Normalization</h4>
+                            <ul style="margin:0 0 1.2rem;padding-left:1.2rem;color:#374151;line-height:1.6;">
+                                <li><strong>Denoising:</strong> Apply Gaussian smoothing to remove noise.</li>
+                                <li><strong>Contrast enhancement:</strong> Use histogram equalization to highlight small or occluded objects.</li>
+                                <li><strong>Multi-scale feature generation:</strong> Resize images at multiple scales (keeping aspect ratio) to improve small-object detection.</li>
+                                <li><strong>Normalization:</strong> Use ImageNet mean/std
+                                    (<code style="background:#eef3ff;border:1px solid #dbe7ff;border-radius:6px;padding:0 .35rem;">mean=[0.485,0.456,0.406]</code>,
+                                    <code style="background:#eef3ff;border:1px solid #dbe7ff;border-radius:6px;padding:0 .35rem;">std=[0.229,0.224,0.225]</code>).
+                                </li>
+                            </ul>
+
+                            <h4 style="margin:1rem 0 .5rem;font-size:.96rem;color:#1f2a44;">Processing Objective</h4>
+                            <p style="margin:0;color:#475569;line-height:1.7;">
+                                These preprocessing steps ensure consistency and robustness when training detection models like YOLOv7.
+                                By resizing, normalizing, and augmenting images from unconstrained environments, the model better generalizes
+                                to varied lighting, occlusion, and cluttered backgrounds.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+
+
+                <!-- ========== SSDA Section ========== -->
+                <section id="ssda" style="margin:0;padding:0;background:transparent;">
+                    <div
+                            style="
+      background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%);
+      border:1px solid #e6eaf2;
+      border-left:4px solid #3b82f6;
+      border-radius:12px;
+      padding:20px 22px;
+      box-shadow:0 12px 36px rgba(15,23,42,0.20);
+      transition:transform .25s ease, box-shadow .25s ease;
+      margin-bottom:20px;"
+                            onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 56px rgba(15,23,42,0.28)'"
+                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 12px 36px rgba(15,23,42,0.20)'"
+                    >
+
+                        <!-- Header -->
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+                            <span style="display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:999px;background:#e6efff;color:#1e40af;font-weight:700;border:1px solid #d7e4ff;">🧪</span>
+                            <h3 style="margin:0;font-size:1.12rem;">Semi-Supervised Data Annotation (SSDA)</h3>
+                        </div>
+                        <p style="margin:0 0 12px;color:#475569;font-size:.95rem;">
+                            Teacher: <strong>YOLOv7</strong> (MS-COCO pretrained) · Max rounds <strong>θ = 4</strong> · Confidence threshold <strong>≥ 0.5</strong>
+                        </p>
+
+                        <!-- Tabs bar -->
+                        <div style="display:flex;align-items:center;gap:0;background:#eef3fb;border:1px solid #dbe7ff;border-radius:10px;overflow:hidden;margin-bottom:12px;">
+                            <button id="tab-flow"   onclick="ssdaTab('flow')"   style="flex:1;padding:10px 12px;border:0;background:#ffffff;font-weight:700;color:#0b3aa3;cursor:pointer;">Flow</button>
+                            <button id="tab-pseudo" onclick="ssdaTab('pseudo')" style="flex:1;padding:10px 12px;border:0;background:transparent;font-weight:600;color:#1f2a44;cursor:pointer;">Pseudocode</button>
+                            <button id="tab-cmd"    onclick="ssdaTab('cmd')"    style="flex:1;padding:10px 12px;border:0;background:transparent;font-weight:600;color:#1f2a44;cursor:pointer;">Commands</button>
+                        </div>
+
+                        <!-- Panel: Flow -->
+                        <div id="panel-flow" style="display:block;">
+                            <ol style="margin:0;padding:0;list-style:none;display:grid;gap:16px;">
+                                <li style="display:flex;gap:12px;align-items:flex-start;">
+                                    <span style="
+  width:32px;height:32px;aspect-ratio:1/1;
+  display:grid;place-items:center;
+  border-radius:999px;background:#0f172a;color:#fff;
+  font-weight:800;line-height:1;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+">1</span>
+                                    <div style="color:#374151;line-height:1.7;">
+                                        <strong>Pseudo-label the unlabeled set with the teacher.</strong><br>
+                                        Run inference on all unlabeled images; if an image’s <em>maximum object confidence</em> is
+                                        <strong>≥ 0.5</strong>, add the whole image (with predicted boxes) to the Train set and remove it from the pool.
+                                    </div>
+                                </li>
+                                <li style="display:flex;gap:12px;align-items:flex-start;">
+                                    <span style="width:32px;height:32px;border-radius:999px;background:#0f172a;color:#fff;display:grid;place-items:center;font-weight:800;">2</span>
+                                    <div style="color:#374151;line-height:1.7;">
+                                        <strong>Iterate up to four rounds.</strong><br>
+                                        Fine-tune YOLOv7 on the expanded Train set, then repeat pseudo-labeling to progressively enlarge the labeled set.
+                                    </div>
+                                </li>
+                                <li style="display:flex;gap:12px;align-items:flex-start;">
+                                    <span style="
+  width:32px;height:32px;aspect-ratio:1/1;
+  display:grid;place-items:center;
+  border-radius:999px;background:#0f172a;color:#fff;
+  font-weight:800;line-height:1;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+">3</span>
+                                    <div style="color:#374151;line-height:1.7;">
+                                        <strong>Human verification to finalize.</strong><br>
+                                        Manually review remaining low-confidence images (CVAT / Label Studio), fix obvious errors, and merge into the final dataset.
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <!-- Panel: Pseudocode -->
+                        <div id="panel-pseudo" style="display:none;">
+                            <div style="
+        position:relative;background:#0d1117 !important;color:#e6edf3 !important;
+        border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;
+        font-size:.9rem;overflow-x:auto;opacity:1 !important;mix-blend-mode:normal !important;filter:none !important;">
+<pre style="margin:0;white-space:pre;background:transparent !important;color:#e6edf3 !important;">
+# SSDA (θ = 4, conf ≥ 0.5)
+train = labeled_set
+pool  = unlabeled_set
+for i in range(4):
+    model.fit(train)                       # train / fine-tune YOLOv7
+    keep = {img for img in pool if max_conf(img) >= 0.5}
+    train |= keep                          # merge confident images
+    pool  -= keep                          # shrink unlabeled pool
+# Remaining images → manual review & correction
+</pre>
+                            </div>
+                        </div>
+
+                        <!-- Panel: Commands -->
+                        <div id="panel-cmd" style="display:none;">
+                            <div style="background:#0d1117 !important;color:#e6edf3 !important;border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;margin-bottom:10px;">
+<pre style="margin:0;white-space:pre;background:transparent !important;color:#e6edf3 !important;">
+# 1) Train teacher (YOLOv7) on the labeled set
+python train.py --model yolov7 --img 640 --epochs 100 --batch 16 \
+  --data configs/fruveg67.yaml --device 0
+</pre>
+                            </div>
+
+                            <div style="background:#0d1117 !important;color:#e6edf3 !important;border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;margin-bottom:10px;">
+<pre style="margin:0;white-space:pre;background:transparent !important;color:#e6edf3 !important;">
+# 2) Pseudo-label unlabeled images (save boxes + confidences)
+python detect.py --weights runs/exp/best.pt --source data/unlabeled \
+  --save-txt --save-conf --conf 0.5 --project runs/pseudo --name round1
+</pre>
+                            </div>
+
+                            <div style="background:#0d1117 !important;color:#e6edf3 !important;border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;margin-bottom:10px;">
+<pre style="margin:0;white-space:pre;background:transparent !important;color:#e6edf3 !important;">
+# 3) Merge confident pseudo labels (conf ≥ 0.5) into the Train set
+python tools/merge_pseudo.py \
+  --pseudo runs/pseudo/round1/labels \
+  --train labels/train \
+  --min-conf 0.5
+</pre>
+                            </div>
+
+                            <div style="background:#0d1117 !important;color:#e6edf3 !important;border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;">
+<pre style="margin:0;white-space:pre;background:transparent !important;color:#e6edf3 !important;">
+# 4) Repeat up to 4 rounds (fine-tune, pseudo-label, merge)
+for i in 1 2 3 4; do
+  python train.py --model yolov7 --img 640 --epochs 50 --batch 16 \
+    --data configs/fruveg67.yaml --device 0 --project runs/ssda --name round${i}
+  python detect.py --weights runs/ssda/round${i}/best.pt --source data/unlabeled \
+    --save-txt --save-conf --conf 0.5 --project runs/pseudo --name round${i}
+  python tools/merge_pseudo.py --pseudo runs/pseudo/round${i}/labels \
+    --train labels/train --min-conf 0.5
+done
+</pre>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </section>
+
+
+
+                <section id="model-fvdnet" style="margin:0;padding:0;background:transparent;">
+                    <div
+                            style="
+      background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%);
+      border:1px solid #e6eaf2;
+      border-left:4px solid #3b82f6;
+      border-radius:12px;
+      padding:20px 22px;
+      box-shadow:0 12px 36px rgba(15,23,42,0.20);
+      transition:transform .25s ease, box-shadow .25s ease;
+      margin-bottom:20px;"
+                            onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 56px rgba(15,23,42,0.28)'"
+                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 12px 36px rgba(15,23,42,0.20)'"
+                    >
+                        <!-- Title -->
+                        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                            <span style="display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:999px;background:#e6efff;color:#1e40af;font-weight:700;border:1px solid #d7e4ff;">🧩</span>
+                            <h3 style="margin:0;font-size:1.12rem;">Model — FVDNet</h3>
+                        </div>
+                        <p style="margin:0 0 12px;color:#475569;font-size:.95rem;">
+                            Three parallel YOLOv7 branches (grid sizes <strong>32</strong>, <strong>16</strong>, <strong>8</strong>) + JSD box loss + focal classification loss; fuse by <em>box averaging</em> and <em>class voting</em>.
+                        </p>
+
+                        <!-- Left-right layout -->
+                        <div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;">
+                            <!-- LEFT: Architecture summary -->
+                            <div style="flex:1 1 52%;min-width:280px;">
+                                <h4 style="margin:0 0 .6rem;font-size:.98rem;color:#0f172a;">Architecture</h4>
+                                <ul style="margin:0 0 1.1rem;padding-left:1.2rem;color:#374151;line-height:1.7;">
+                                    <li><strong>Backbone/Head:</strong> YOLOv7 detector replicated into <strong>three branches</strong>.</li>
+                                    <li><strong>Multi-scale design:</strong> per-branch detection grid sizes <code style="background:#eef3ff;border:1px solid #dbe7ff;border-radius:6px;padding:0 .35rem;">32</code>,
+                                        <code style="background:#eef3ff;border:1px solid #dbe7ff;border-radius:6px;padding:0 .35rem;">16</code>,
+                                        <code style="background:#eef3ff;border:1px solid #dbe7ff;border-radius:6px;padding:0 .35rem;">8</code> to better cover small↔large objects.</li>
+                                    <li><strong>Fusion:</strong> average the three box regressions; determine final class by majority <em>vote</em>.</li>
+                                </ul>
+
+                                <h4 style="margin:0 0 .6rem;font-size:.98rem;color:#0f172a;">Losses</h4>
+                                <ul style="margin:0 0 1.1rem;padding-left:1.2rem;color:#374151;line-height:1.7;">
+                                    <li><strong>Bounding boxes as distributions:</strong> treat each coordinate <em>(x,y,w,h)</em> as a
+                                        single-variate Gaussian with predicted <em>μ, σ</em>; compare predicted vs. GT distributions with JSD.</li>
+                                    <li><strong>Overall objective:</strong> <em>L<sub>overall</sub> = L<sub>focal</sub> + L<sub>JSD</sub></em>;
+                                        <em>L<sub>focal</sub></em> uses γ (0–5) and α-balancing.</li>
+                                </ul>
+
+                                <h4 style="margin:0 0 .6rem;font-size:.98rem;color:#0f172a;">Prediction Flow</h4>
+                                <ol style="margin:0;padding-left:1.2rem;color:#374151;line-height:1.7;">
+                                    <li>Run the three YOLOv7 branches on an image.</li>
+                                    <li>Average their box outputs; apply NMS.</li>
+                                    <li>Vote on class labels to get the final prediction.</li>
+                                </ol>
+                            </div>
+
+                            <!-- RIGHT: Math / Pseudocode -->
+                            <div style="flex:1 1 42%;min-width:260px;">
+                                <!-- Equations (JSD & Overall Loss) -->
+                                <h4 style="margin:0 0 .6rem;font-size:.98rem;color:#0f172a;">Equations (JSD & Overall Loss)</h4>
+                                <div style="background:#0d1117 !important;color:#e6edf3 !important;border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;">
+  <pre style="
+      margin:0;white-space:pre;
+      background:#0d1117 !important;
+      color:#e6edf3 !important;
+      -webkit-text-fill-color:#e6edf3 !important;
+      opacity:1 !important; mix-blend-mode:normal !important; filter:none !important; text-shadow:none !important;">
+    <code style="background:transparent !important;color:#e6edf3 !important;-webkit-text-fill-color:#e6edf3 !important;font:inherit !important;">
+# JSD between predicted P and GT Q (M = 0.5*(P+Q))
+L_JSD(P,Q) = 0.5 * KL(P || M) + 0.5 * KL(Q || M)
+
+# Overall detection objective
+L_overall = L_focal + L_JSD
+    </code>
+  </pre>
+                                </div>
+
+                                <!-- Fusion Logic (Pseudo) -->
+                                <h4 style="margin:1rem 0 .6rem;font-size:.98rem;color:#0f172a;">Fusion Logic (Pseudo)</h4>
+                                <div style="background:#0d1117 !important;color:#e6edf3 !important;border-radius:10px;padding:14px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;">
+  <pre style="
+      margin:0;white-space:pre;
+      background:#0d1117 !important;
+      color:#e6edf3 !important;
+      -webkit-text-fill-color:#e6edf3 !important;
+      opacity:1 !important; mix-blend-mode:normal !important; filter:none !important; text-shadow:none !important;">
+    <code style="background:transparent !important;color:#e6edf3 !important;-webkit-text-fill-color:#e6edf3 !important;font:inherit !important;">
+# boxes_b{i}: Nx4 boxes from branch i; cls_p{i}: NxC logits
+boxes  = mean([boxes_b1, boxes_b2, boxes_b3], axis=0)
+scores = softmax(cls_p1) + softmax(cls_p2) + softmax(cls_p3)
+labels = argmax(scores, axis=1)        # voting by sum
+final  = NMS(boxes, max(scores), iou=0.5)
+    </code>
+  </pre>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
 
 
 
                 <div class="card">
                     <img class="img" src="./assets/p1.png" alt="FVDNet architecture" loading="lazy" decoding="async">
-                    <div class="legend">FVDNet training with three parallel processes (YOLOv8n variants). Source: <a href="refs.html#r4">[4]</a></div>
+                    <div class="legend">Figure 1. FVDNet training with three parallel processes (YOLOv8n variants). Source: <a href="refs.html#r4">[4]</a></div>
                 </div>
 
-                <!-- 3. Examples -->
-                <section id="examples">
-                    <h2>4. Examples</h2>
-                    <div class="grid cols-2">
-                        <figure class="card">
-                            <img class="img" src="assets/m.png" alt="Market scene detection example" />
-                            <figcaption class="figcap">Detection in a busy market with illumination/occlusion/clutter.</figcaption>
-                            <div class="legend">Image Source: AI-generated illustration.</div>
-                        </figure>
-                        <figure class="card">
-                            <img class="img" src="assets/wild.png" alt="Open-refrigerator example" />
-                            <figcaption class="figcap">A variety of fruits captured in their natural growing environments — including orchards, farms, and wild trees. .</figcaption>
-                            <div class="legend">Image Source:<a href="refs.html#r4">[4]</a></div>
-                        </figure>
-                    </div>
-                </section>
+
+
+
+
+
 
                 <!-- 4. Experimental -->
                 <section id="experimental">
                     <h2>4. Experimental</h2>
                     <p>We evaluate FVDNet on the FRUVEG67 dataset. The goal is to assess the effectiveness of the proposed detector by swapping alternative backbones within a set of state-of-the-art models. Specifically, we vary the backbone used to extract features for FVDNet (e.g., ResNet-152 and InceptionNet). Models are trained for 100 epochs on two NVIDIA A30 GPUs. The dataset is split 70%/20%/10% for train/test/validation. For comparisons with YOLO baselines, we report performance at IoU thresholds of 0.50, 0.75, and 0.90.</p>
 
+
+                    <section id="ops-quick-tabs" style="margin:0;padding:0;background:transparent;">
+                        <div
+                                style="background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%);
+           border:1px solid #e6eaf2;border-left:4px solid #3b82f6;border-radius:12px;
+           padding:18px 20px;box-shadow:0 12px 36px rgba(15,23,42,.20);
+           transition:transform .25s,box-shadow .25s;margin-bottom:18px;"
+                                onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 20px 56px rgba(15,23,42,.28)'"
+                                onmouseout="this.style.transform='none';this.style.boxShadow='0 12px 36px rgba(15,23,42,.20)'">
+
+                            <h3 style="margin:0 0 10px;font-size:1.08rem;">Training · Evaluation · Extensions (Quick Guide)</h3>
+
+                            <!-- Segmented tabs -->
+                            <div style="display:flex;align-items:center;background:#eef4ff;border:1px solid #dbe7ff;
+                border-radius:12px;overflow:hidden;margin-bottom:12px;">
+                                <button id="ops-tab-train" onclick="opsTab('train')" aria-selected="true"
+                                        style="flex:1;padding:10px;border:0;background:#ffffff;color:#0b3aa3;
+                     font-weight:700;cursor:pointer;">Training</button>
+                                <button id="ops-tab-eval"  onclick="opsTab('eval')"  aria-selected="false"
+                                        style="flex:1;padding:10px;border:0;background:transparent;color:#25314f;
+                     font-weight:600;cursor:pointer;">Evaluation</button>
+                                <button id="ops-tab-ext"   onclick="opsTab('ext')"   aria-selected="false"
+                                        style="flex:1;padding:10px;border:0;background:transparent;color:#25314f;
+                     font-weight:600;cursor:pointer;">Extensions</button>
+                            </div>
+
+                            <!-- TRAINING panel -->
+                            <div id="ops-panel-train" style="display:block;">
+                                <ul style="margin:0 0 10px;padding-left:1.1rem;color:#374151;line-height:1.6;">
+                                    <li><strong>Small objects:</strong> 640×640, multi-scale, sensible NMS.</li>
+                                    <li><strong>Stable:</strong> EMA; keep global batch via grad-acc.</li>
+                                    <li><strong>Repro:</strong> fix seeds; log SW/HW versions.</li>
+                                </ul>
+                                <div style="background:#0d1117!important;color:#e6edf3!important;border-radius:10px;padding:12px;
+                  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;">
+<pre style="margin:0;white-space:pre;background:transparent!important;color:#e6edf3!important;-webkit-text-fill-color:#e6edf3!important;">
+python train.py --model yolov7 --img 640 --epochs 100 --batch 16 \
+  --data configs/fruveg67.yaml --device 0   # use grad-acc if VRAM is tight
+</pre>
+                                </div>
+                            </div>
+
+                            <!-- EVALUATION panel -->
+                            <div id="ops-panel-eval" style="display:none;">
+                                <ul style="margin:0 0 10px;padding-left:1.1rem;color:#374151;line-height:1.6;">
+                                    <li><strong>Report:</strong> mAP, AP@0.5/0.75/0.9, per-class AP.</li>
+                                </ul>
+                                <div style="background:#0d1117!important;color:#e6edf3!important;border-radius:10px;padding:12px;
+                  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;margin-bottom:8px;">
+<pre style="margin:0;white-space:pre;background:transparent!important;color:#e6edf3!important;-webkit-text-fill-color:#e6edf3!important;">
+python eval_ensemble.py --weights runs/ens/*.pt \
+  --data configs/fruveg67.yaml --iou 0.5 0.75 0.9 --save-json runs/ens/pred.json
+</pre>
+                                </div>
+                                <div style="background:#0d1117!important;color:#e6edf3!important;border-radius:10px;padding:12px;
+                  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;">
+<pre style="margin:0;white-space:pre;background:transparent!important;color:#e6edf3!important;-webkit-text-fill-color:#e6edf3!important;">
+python tools/vis.py --pred runs/ens/pred.json --img-root FRUVEG67_proc/images
+</pre>
+                                </div>
+                            </div>
+
+                            <!-- EXTENSIONS panel -->
+                            <div id="ops-panel-ext" style="display:none;">
+                                <ul style="margin:0 10px 10px;padding-left:1.1rem;color:#374151;line-height:1.6;">
+                                    <li><strong>Loss:</strong> compare JSD vs. KLD.</li>
+                                    <li><strong>Backbone:</strong> ResNet-152 / DenseNet-169 / Inception.</li>
+                                    <li><strong>Grid:</strong> fixed {8,16,32} vs. adaptive.</li>
+                                    <li><strong>Cross-dataset:</strong> validate on VOC/COCO subsets.</li>
+                                </ul>
+                                <div style="background:#0d1117!important;color:#e6edf3!important;border-radius:10px;padding:12px;
+                  font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;">
+<pre style="margin:0;white-space:pre;background:transparent!important;color:#e6edf3!important;-webkit-text-fill-color:#e6edf3!important;">
+python demo.py --weights runs/ens/*.pt --source fridge_samples/
+</pre>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </section>
+
+
                     <img class="img" src="assets/YOLO.png" alt="YOLO results" />
-                    <figcaption class="figcap">Results on YOLO v7.</figcaption>
-                    <div class="legend">Image Source: <a href="refs.html#r1">[1]</a></div>
+                    <div class="legend">Image Source: <a href="refs.html#r4">[4]</a></div>
 
                     <img class="img" src="assets/FVD.png" alt="FVDNet results" />
-                    <figcaption class="figcap">Results on FVDNet.</figcaption>
                     <div class="legend">Image Source: <a href="refs.html#r4">[4]</a></div>
                 </section>
+
+
+
+
+
 
                 <!-- 5. Results -->
                 <section id="results-fvdnet" class="section-mm">
@@ -511,31 +1007,127 @@
                             <li><strong>Low-signal classes:</strong> FVDNet still leads (e.g., Grapefruit <em>0.31 → <strong>0.42</strong></em>, Coriander <em>0.42 → <strong>0.44</strong></em>).</li>
                             <li><strong>Exceptions:</strong> A few ties/slight deficits (e.g., Ivy gourd Y6 0.48 vs FVDNet 0.47), but rare.</li>
                         </ul>
-                        <div class="bq"><strong>Takeaway:</strong> FVDNet improves robustness to distance, occlusion, and clutter—often yielding double-digit AP gains.</div>
+                        <div class="bq"><strong>Takeaway:</strong>
+                            <li>FVDNet surpasses YOLOv7 on most classes, especially small/occluded items.</li>
+                            <li>Cleaner localization and fewer misses in cluttered scenes.</li>
+                            <li>FVDNet improves robustness to distance, occlusion, and clutter—often yielding double-digit AP gains.</li>
+                            </div>
                     </div>
                 </section>
 
+
                 <!-- 6. Strengths & 7. Limits -->
-                <section id="strengths">
-                    <h2>6. Strengths &amp; Applications</h2>
-                    <ul>
-                        <li><strong>Household value:</strong> Automatic stock tracking, duplicate-purchase prevention, freshness alerts, shopping-list assistance.</li>
-                        <li><strong>Beyond the fridge:</strong> The pipeline generalizes to kitchens, markets, cafeterias.</li>
-                        <li><strong>Privacy-friendly option:</strong> All processing can stay local.</li>
-                    </ul>
+                <section id="strengths" style="margin:0;padding:0;background:transparent;">
+                    <h2>6. Strengths & Applications</h2>
+                    <div
+                            style="background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%);
+           border:1px solid #e6eaf2;border-left:4px solid #3b82f6;border-radius:12px;
+           padding:18px 20px;box-shadow:0 12px 36px rgba(15,23,42,.20);
+           transition:transform .25s ease, box-shadow .25s ease; margin-bottom:18px;"
+                            onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 56px rgba(15,23,42,.28)'"
+                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 12px 36px rgba(15,23,42,.20)'">
+
+
+                        <p style="margin:0 0 12px;color:#475569;">
+                            FVDNet combines a three-branch YOLOv7 ensemble (multi-scale 32/16/8) with a JSD-based box loss and focal classification,
+                            plus SSDA for low-cost labeling—yielding higher recall on small/occluded produce and cleaner localization.
+                        </p>
+
+                        <div style="display:flex;flex-wrap:wrap;gap:18px;">
+                            <!-- Strengths -->
+                            <div style="flex:1 1 48%;min-width:280px;">
+                                <h4 style="margin:0 0 6px;font-size:.98rem;color:#0f172a;">Strengths</h4>
+                                <ul style="margin:0;padding-left:1.1rem;color:#374151;line-height:1.7;">
+                                    <li><strong>Small-object performance:</strong> multi-scale heads improve fruit/vegetable recall.</li>
+                                    <li><strong>Robustness:</strong> handles illumination change, occlusion, and background clutter.</li>
+                                    <li><strong>Stable boxes:</strong> JSD treats <em>(x,y,w,h)</em> as distributions → tighter localization.</li>
+                                    <li><strong>Data efficiency:</strong> SSDA cuts manual labeling via iterative pseudo-labels.</li>
+                                    <li><strong>Drop-in workflow:</strong> reuses YOLOv7 tools, training tricks, and deployment stack.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Applications -->
+                            <div style="flex:1 1 48%;min-width:280px;">
+                                <h4 style="margin:0 0 6px;font-size:.98rem;color:#0f172a;">Applications</h4>
+                                <ul style="margin:0 0 8px;padding-left:1.1rem;color:#374151;line-height:1.7;">
+                                    <li><strong>Smart retail:</strong> checkout-free produce recognition, inventory counts.</li>
+                                    <li><strong>Home & kitchen:</strong> fridge scanning, diet logging, waste tracking.</li>
+                                    <li><strong>Agrifood lines:</strong> grading/sorting on conveyors, defect pre-screen.</li>
+                                    <li><strong>Markets & logistics:</strong> box-level auditing, stock analytics, cold-chain checks.</li>
+                                    <li><strong>Robotics:</strong> pick-and-place perception for small items.</li>
+                                    <li><strong>Education/labeling:</strong> accelerate dataset curation with SSDA rounds.</li>
+                                </ul>
+
+                                <!-- (Optional) quick demo command -->
+                                <div style="background:#0d1117!important;color:#e6edf3!important;border-radius:10px;padding:12px;
+                    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;overflow-x:auto;">
+<pre style="margin:0;white-space:pre;background:transparent!important;color:#e6edf3!important;">
+# Quick demo
+python demo.py --weights runs/ens/*.pt --source samples/produce/
+</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
-                <section id="limits">
+<br>
+
+                <!-- ===================== 7. Limitations / Future Work ===================== -->
+                <section id="limits" style="margin:0;padding:0;background:transparent;">
                     <h2>7. Limitations / Future Work</h2>
-                    <ul>
-                        <li><strong>Label quality &amp; domain shift:</strong> SSDA labels and changing scenes (lighting/glare/packaging) can reduce accuracy.</li>
-                        <li><strong>Edge constraints:</strong> Ensembles increase inference cost and power on small devices.</li>
-                        <li><strong>Long-tail classes:</strong> Rare/visually similar items need better calibration and disambiguation.</li>
-                        <li><strong>Active learning:</strong> Human-in-the-loop selection + SSDA refinement to cut labeling cost.</li>
-                    </ul>
+                    <div
+                            style="background:linear-gradient(135deg,#e0ecff 0%,#f7f9ff 100%);
+           border:1px solid #e6eaf2;border-left:4px solid #3b82f6;border-radius:12px;
+           padding:18px 20px;box-shadow:0 12px 36px rgba(15,23,42,.20);
+           transition:transform .25s ease, box-shadow .25s ease; margin-bottom:18px;"
+                            onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 56px rgba(15,23,42,.28)'"
+                            onmouseout="this.style.transform='none'; this.style.boxShadow='0 12px 36px rgba(15,23,42,.20)'">
+
+
+                        <p style="margin:0 0 10px;color:#475569;">
+                            While FVDNet improves recall and localization for small/occluded produce, several trade-offs and open directions remain.
+                        </p>
+
+                        <div style="display:flex;flex-wrap:wrap;gap:18px;">
+                            <!-- Limitations -->
+                            <div style="flex:1 1 48%;min-width:280px;">
+                                <h4 style="margin:0 0 6px;font-size:.98rem;color:#0f172a;">Limitations</h4>
+                                <ul style="margin:0;padding-left:1.1rem;color:#374151;line-height:1.7;">
+                                    <li><strong>RGB-only:</strong> performance drops under extreme lighting, heavy glare, or color cast.</li>
+                                    <li><strong>Severe occlusion & clutter:</strong> still challenging for tiny/overlapping items.</li>
+                                    <li><strong>Ensemble cost:</strong> three-branch inference increases latency and memory.</li>
+                                    <li><strong>Pseudo-label noise:</strong> SSDA may propagate early mistakes (confirmation bias).</li>
+                                    <li><strong>Long-tail classes:</strong> data imbalance can limit per-class AP stability.</li>
+                                    <li><strong>Numerics:</strong> JSD box loss requires variance clamps / ε to remain stable.</li>
+                                    <li><strong>Domain shift:</strong> retail/kitchen scenes unseen in training may degrade accuracy.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Future Work -->
+                            <div style="flex:1 1 48%;min-width:280px;">
+                                <h4 style="margin:0 0 6px;font-size:.98rem;color:#0f172a;">Future Work</h4>
+                                <ul style="margin:0 0 8px;padding-left:1.1rem;color:#374151;line-height:1.7;">
+                                    <li><strong>Distillation:</strong> compress the ensemble into a single fast student for edge devices.</li>
+                                    <li><strong>Uncertainty-aware training:</strong> calibrated scores, IoU-aware filtering for SSDA.</li>
+                                    <li><strong>Better data acquisition:</strong> active learning + hard-negative mining for long-tail classes.</li>
+                                    <li><strong>Domain adaptation:</strong> style/photometric adaptation and synthetic data for new stores/kitchens.</li>
+                                    <li><strong>Multi-modal sensing:</strong> add depth or NIR for illumination-robust detection.</li>
+                                    <li><strong>Video & tracking:</strong> temporal smoothing and tubelet NMS to reduce flicker/misses.</li>
+                                    <li><strong>Task extension:</strong> joint detection + grading/ripeness/defect segmentation.</li>
+                                </ul>
+
+                                <!-- optional note -->
+                                <div style="background:#fff7ea;border:1px solid #f1e3c7;border-radius:10px;padding:10px 12px;color:#7a5200;">
+                                    <strong>Deployment note:</strong> audit class bias and mislabels periodically; monitor drift and retrain with fresh data.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
-            </section>
+
+
         </div>
     </div>
 </main>
@@ -642,6 +1234,41 @@
             }
         });
     })();
+
+
+
+    <!-- Tiny inline JS for tabs -->
+        function ssdaTab(which){
+        var tabs=['flow','pseudo','cmd'];
+        tabs.forEach(function(t){
+        document.getElementById('panel-'+t).style.display = (t===which)?'block':'none';
+        var btn=document.getElementById('tab-'+t);
+        if(btn){
+        btn.style.background = (t===which)?'#ffffff':'transparent';
+        btn.style.color = (t===which)?'#0b3aa3':'#1f2a44';
+        btn.style.fontWeight = (t===which)?'700':'600';
+    }
+    });
+    }
+
+
+
+    <!-- tiny JS for segmented tabs -->
+
+        function opsTab(which){
+        const ids=['train','eval','ext'];
+        ids.forEach(id=>{
+        const active = id===which;
+        document.getElementById('ops-panel-'+id).style.display = active?'block':'none';
+        const btn = document.getElementById('ops-tab-'+id);
+        btn.style.background = active ? '#ffffff' : 'transparent';
+        btn.style.color      = active ? '#0b3aa3' : '#25314f';
+        btn.style.fontWeight = active ? '700' : '600';
+        btn.setAttribute('aria-selected', active);
+    });
+    }
+
+
 </script>
 </body>
 </html>
